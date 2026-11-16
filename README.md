@@ -1,4 +1,5 @@
 Grand Azure Luxury Resort & Spa
+
 A Premium Luxury Resort Booking & Management Website
 
 Grand Azure Luxury Resort & Spa is a responsive web-based resort booking platform designed to provide guests with a premium online reservation experience. The application allows users to explore luxury accommodations, discover curated packages, browse dining options, manage reservations, and access personalized guest services.
