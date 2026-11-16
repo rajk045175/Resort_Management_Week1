@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Azure Pavilion Dining & Menus | Grand Azure Luxury Resort</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-pearl text-slate-800 antialiased flex flex-col min-h-screen">
+
+  <header class="sticky top-0 left-0 right-0 z-50 bg-azure-950/95 backdrop-blur-md border-b border-gold-400/20 py-3.5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <img src="images/logo.jpg" alt="Grand Azure Resort Logo" class="h-10 sm:h-12 w-auto rounded-lg object-contain border border-gold-400/40 shadow-glow-gold group-hover:border-gold-300 transition-all" />
+        <div class="flex flex-col">
+          <span class="font-serif tracking-widest text-lg sm:text-xl font-bold uppercase text-white">Grand Azure</span>
+          <span class="text-[10px] tracking-[0.25em] uppercase text-gold-300 font-medium -mt-1">Resort & Spa</span>
+        </div>
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-7 text-sm font-medium tracking-wide">
+        <a href="index.html" class="text-slate-200 hover:text-gold-300">Home</a>
+        <a href="rooms.html" class="text-slate-200 hover:text-gold-300">Sanctuaries & Suites</a>
+        <a href="packages.html" class="text-slate-200 hover:text-gold-300">Curated Packages</a>
+        <a href="dining.html" class="text-gold-300 font-semibold border-b-2 border-gold-400 pb-0.5">Destination Dining</a>
+        <a href="dashboard.html" class="text-slate-200 hover:text-gold-300">Guest Dashboard</a>
+        <a href="admin.html" class="text-gold-300 font-semibold">Admin Portal</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <button onclick="toggleCartDrawer(true)" class="relative p-2 text-slate-200 hover:text-gold-300" title="Dining Tray">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+          <span id="cartBadge" class="absolute -top-1 -right-1 bg-gold-400 text-azure-950 text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
+        </button>
+        <a href="auth.html" id="navUserBtn" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full border border-gold-400/40 bg-azure-900/60 text-slate-200 text-xs font-medium">Sign In</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 pb-20">
+    <!-- DYNAMIC RESORT BANNER -->
+    <section class="bg-azure-950 text-white py-14 px-4 border-b border-gold-400/20 relative overflow-hidden">
+      <div class="absolute inset-0 opacity-15">
+        <img id="bannerResortBg" src="https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=2000&q=80" alt="Resort Backdrop" class="w-full h-full object-cover transition-all duration-700" />
+      </div>
+      <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gold-400/30 bg-azure-900/70 text-gold-300 text-[11px] font-bold uppercase tracking-widest shadow-glow-gold">
+          <span id="bannerResortBadge">★ Destination Gastronomy & Curated Menus (INR ₹)</span>
+        </div>
+        <h1 id="bannerResortTitle" class="font-serif text-3xl sm:text-5xl font-bold tracking-tight">
+          Grand Azure Maldives Atoll — Reef Dining
+        </h1>
+        <p id="bannerResortDesc" class="text-xs sm:text-sm text-slate-300 max-w-3xl font-light leading-relaxed">
+          An idyllic private coral atoll featuring fresh caught reef seafood, overwater pavilions, tropical fruit gastronomy, and ocean breeze sundowners.
+        </p>
+        <div class="flex flex-wrap items-center gap-4 pt-1 text-xs text-gold-300">
+          <span class="flex items-center gap-1.5">
+            <span>📍</span><strong id="bannerResortLocation" class="text-white">South Palm Atoll, Maldives</strong>
+          </span>
+          <span class="text-slate-500">•</span>
+          <span class="flex items-center gap-1.5">
+            <span>👨‍🍳</span><strong id="bannerResortChef" class="text-white">Chef Yannick Le Corre</strong>
+          </span>
+          <span class="text-slate-500">•</span>
+          <span class="flex items-center gap-1.5">
+            <span>🍽️</span><span id="bannerResortTheme" class="text-gold-200">Reef Seafood & Tropical Fusion</span>
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESORT DESTINATION SELECTOR -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-200">
+        <div>
+          <h2 class="font-serif font-bold text-xl text-slate-900">Select Destination Property</h2>
+          <p class="text-xs text-slate-500">Each Grand Azure property features its own distinct culinary identity and signature dishes priced in INR.</p>
+        </div>
+        <span class="text-[11px] font-bold uppercase tracking-wider text-gold-600 bg-gold-50 px-3 py-1 rounded-full border border-gold-200">
+          4 Destination Menus Available
+        </span>
+      </div>
+
+      <!-- 4 Resort Cards Grid -->
+      <div id="resortCardsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- Filters and Category Strip -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-6">
+      <div class="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
+        <div class="relative flex-1 max-w-md w-full">
+          <input type="text" id="menuSearch" placeholder="Search dish, wine, ingredients in this resort..." oninput="renderMenu()" class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-gold-400" />
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+          <!-- Resort Dropdown -->
+          <select id="resortDropdownSelect" onchange="switchResort(this.value)" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-50 border border-slate-200 text-slate-800 focus:outline-none focus:border-gold-400">
+            <!-- Injected via JS -->
+          </select>
+
+          <button onclick="setDietFilter('ALL')" id="dietAll" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-azure-950 text-gold-300 border border-azure-950">All Diets</button>
+          <button onclick="setDietFilter('VEG')" id="dietVeg" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-50 text-emerald-700 border border-slate-200 hover:border-emerald-500 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Pure Veg
+          </button>
+          <button onclick="setDietFilter('NON_VEG')" id="dietNonVeg" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-50 text-rose-700 border border-slate-200 hover:border-rose-500 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-rose-500"></span> Non-Veg
+          </button>
+          <button onclick="toggleChefSpecials()" id="chefSpecialsBtn" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-50 text-slate-700 border border-slate-200 hover:border-gold-300">
+            ★ Chef's Special
+          </button>
+        </div>
+      </div>
+
+      <!-- Categories Pills -->
+      <div class="flex gap-2 overflow-x-auto pb-2" id="categoryPills">
+        <!-- Injected via JS -->
+      </div>
+
+      <!-- Count & Floating Tray Trigger -->
+      <div class="flex items-center justify-between text-xs text-slate-500">
+        <p>Showing <strong id="menuCount" class="text-slate-800">0</strong> dishes for <span id="currentResortLabel" class="font-bold text-azure-950"></span></p>
+        <button onclick="toggleCartDrawer(true)" class="px-4 py-2 rounded-full bg-azure-950 text-gold-300 font-bold flex items-center gap-2 shadow hover:bg-azure-900 transition-all">
+          <span>View Order Tray</span>
+        </button>
+      </div>
+
+      <!-- Menu Grid -->
+      <div id="menuGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </main>
+
+  <!-- CART DRAWER -->
+  <div id="cartDrawer" class="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white shadow-2xl transition-transform duration-300 transform translate-x-full flex flex-col">
+    <div class="p-5 bg-azure-950 text-white flex items-center justify-between border-b border-gold-400/20">
+      <h3 class="font-serif font-bold text-base text-white">Your Dining Tray</h3>
+      <button onclick="toggleCartDrawer(false)" class="text-slate-300 hover:text-white text-lg">✕</button>
+    </div>
+    <div id="cartDrawerContent" class="flex-1 overflow-y-auto p-5"></div>
+    <div id="cartDrawerFooter" class="p-5 bg-slate-50 border-t border-slate-200 space-y-3 hidden">
+      <div class="text-xs text-slate-600 space-y-1">
+        <div class="flex justify-between"><span>Subtotal:</span><span id="cartDrawerSubtotal" class="font-bold">₹0</span></div>
+        <div class="flex justify-between"><span>Luxury GST (18%):</span><span id="cartDrawerTax">₹0</span></div>
+        <div class="flex justify-between font-bold text-slate-900 border-t pt-1 text-sm"><span>Total:</span><span id="cartDrawerTotal" class="text-gold-600">₹0</span></div>
+      </div>
+      <a href="checkout.html" class="block w-full py-3 rounded-xl bg-gold-gradient text-azure-950 text-center font-bold text-xs uppercase tracking-wider shadow">Proceed with Order</a>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    let currentResortId = urlParams.get('resort') || getCurrentResortId();
+    setCurrentResortId(currentResortId);
+
+    const categories = ['All', 'Starters', 'Mains', 'Seafood', 'Desserts', 'Beverages'];
+    let activeCategory = 'All';
+    let activeDiet = 'ALL';
+    let onlyChefSpecials = false;
+
+    function switchResort(resortId) {
+      currentResortId = resortId;
+      setCurrentResortId(resortId);
+      activeCategory = 'All';
+      renderBanner();
+      renderResortCards();
+      renderCategoryPills();
+      renderMenu();
+    }
+
+    function renderBanner() {
+      const resorts = getResorts();
+      const resort = resorts.find(r => r.id === currentResortId) || resorts[0];
+
+      document.getElementById('bannerResortTitle').textContent = `${resort.name} — Destination Dining`;
+      document.getElementById('bannerResortDesc').textContent = resort.description;
+      document.getElementById('bannerResortLocation').textContent = resort.location;
+      document.getElementById('bannerResortChef').textContent = resort.chef;
+      document.getElementById('bannerResortTheme').textContent = resort.cuisineTheme;
+      document.getElementById('bannerResortBg').src = resort.image;
+      document.getElementById('currentResortLabel').textContent = resort.name;
+
+      const select = document.getElementById('resortDropdownSelect');
+      select.innerHTML = resorts.map(r => `
+        <option value="${r.id}" ${r.id === currentResortId ? 'selected' : ''}>${r.name.replace('Grand Azure ', '')}</option>
+      `).join('');
+    }
+
+    function renderResortCards() {
+      const resorts = getResorts();
+      const grid = document.getElementById('resortCardsGrid');
+      grid.innerHTML = resorts.map(r => {
+        const isSelected = r.id === currentResortId;
+        return `
+          <div onclick="switchResort('${r.id}')" class="group p-3.5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between ${isSelected ? 'bg-azure-950 text-white border-gold-400 shadow-luxury ring-2 ring-gold-400/40' : 'bg-white text-slate-800 border-slate-200 hover:border-gold-300'}">
+            <div class="space-y-2">
+              <div class="relative h-28 rounded-xl overflow-hidden">
+                <img src="${r.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                <span class="absolute top-2 left-2 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${isSelected ? 'bg-gold-500 text-azure-950' : 'bg-azure-950/80 text-gold-300'}">
+                  ${r.badge.split('&')[0]}
+                </span>
+              </div>
+              <div>
+                <h4 class="font-serif font-bold text-sm ${isSelected ? 'text-gold-300' : 'text-slate-900'}">${r.name.replace('Grand Azure ', '')}</h4>
+                <p class="text-[10px] ${isSelected ? 'text-slate-300' : 'text-slate-500'} truncate">${r.location}</p>
+                <p class="text-[11px] ${isSelected ? 'text-slate-200' : 'text-slate-600'} line-clamp-1 mt-1 font-medium">${r.cuisineTheme}</p>
+              </div>
+            </div>
+            <div class="pt-2 text-right">
+              <span class="text-[10px] font-bold uppercase tracking-wider ${isSelected ? 'text-gold-300' : 'text-gold-600'}">
+                ${isSelected ? '● Active Menu' : 'Switch Menu →'}
+              </span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderCategoryPills() {
+      const pillsContainer = document.getElementById('categoryPills');
+      pillsContainer.innerHTML = categories.map(cat => `
+        <button onclick="setCategory('${cat}')" class="cat-pill px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider shrink-0 transition-all ${cat === activeCategory ? 'bg-gold-gradient text-azure-950 shadow' : 'bg-white border border-slate-200 text-slate-600 hover:border-gold-400'}">
+          ${cat}
+        </button>
+      `).join('');
+    }
+
+    function setCategory(cat) {
+      activeCategory = cat;
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        if (btn.textContent.trim() === cat) {
+          btn.className = 'cat-pill px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider shrink-0 bg-gold-gradient text-azure-950 shadow';
+        } else {
+          btn.className = 'cat-pill px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider shrink-0 bg-white border border-slate-200 text-slate-600 hover:border-gold-400';
+        }
+      });
+      renderMenu();
+    }
+
+    function setDietFilter(diet) {
+      activeDiet = diet;
+      ['All', 'Veg', 'NonVeg'].forEach(d => {
+        const id = `diet${d}`;
+        const btn = document.getElementById(id);
+        if (d.toUpperCase() === diet.replace('_', '')) {
+          btn.classList.add('bg-azure-950', 'text-gold-300');
+          btn.classList.remove('bg-slate-50', 'text-slate-600');
+        } else {
+          btn.classList.remove('bg-azure-950', 'text-gold-300');
+          btn.classList.add('bg-slate-50');
+        }
+      });
+      renderMenu();
+    }
+
+    function toggleChefSpecials() {
+      onlyChefSpecials = !onlyChefSpecials;
+      const btn = document.getElementById('chefSpecialsBtn');
+      if (onlyChefSpecials) {
+        btn.className = 'px-3.5 py-2 rounded-xl text-xs font-bold bg-gold-500 text-azure-950 border border-gold-500';
+      } else {
+        btn.className = 'px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-50 text-slate-700 border border-slate-200';
+      }
+      renderMenu();
+    }
+
+    function renderMenu() {
+      const search = document.getElementById('menuSearch').value.toLowerCase().trim();
+      const resortItems = getMenuItemsByResort(currentResortId);
+
+      const filtered = resortItems.filter(item => {
+        if (activeCategory !== 'All' && item.category !== activeCategory) return false;
+        if (activeDiet === 'VEG' && !item.isVeg) return false;
+        if (activeDiet === 'NON_VEG' && item.isVeg) return false;
+        if (onlyChefSpecials && !item.isChefSpecial) return false;
+        if (search && !item.name.toLowerCase().includes(search) && !item.description.toLowerCase().includes(search)) return false;
+        return true;
+      });
+
+      document.getElementById('menuCount').textContent = filtered.length;
+
+      const grid = document.getElementById('menuGrid');
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-16 text-center space-y-3 bg-white rounded-3xl border border-slate-200">
+            <div class="text-4xl">🍽️</div>
+            <h4 class="font-serif font-bold text-lg text-slate-800">No Dishes Found</h4>
+            <p class="text-xs text-slate-500 max-w-sm mx-auto">No culinary creations in this resort match your selected category or dietary filter.</p>
+            <button onclick="setCategory('All'); setDietFilter('ALL');" class="px-4 py-2 rounded-xl bg-gold-gradient text-azure-950 text-xs font-bold uppercase tracking-wider shadow">
+              Reset Filters
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(item => `
+        <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-luxury border border-slate-200/80 transition-all flex flex-col justify-between">
+          <div>
+            <div class="relative h-48 overflow-hidden bg-slate-100">
+              <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover" />
+              <div class="absolute top-3 left-3 flex items-center gap-2">
+                <div class="w-5 h-5 rounded flex items-center justify-center border ${item.isVeg ? 'border-emerald-600 bg-white' : 'border-rose-600 bg-white'}" title="${item.isVeg ? 'Vegetarian' : 'Non-Vegetarian'}">
+                  <div class="w-2.5 h-2.5 rounded-full ${item.isVeg ? 'bg-emerald-600' : 'bg-rose-600'}"></div>
+                </div>
+                ${item.isChefSpecial ? `<span class="px-2.5 py-0.5 rounded-full bg-gold-gradient text-azure-950 text-[10px] font-bold uppercase tracking-wider">Chef's Signature</span>` : ''}
+              </div>
+              <div class="absolute bottom-3 right-3">
+                <span class="px-3 py-1 rounded-full bg-azure-950/90 text-gold-300 font-serif font-bold text-sm border border-gold-400/30">${formatINR(item.price)}</span>
+              </div>
+            </div>
+
+            <div class="p-5 space-y-2">
+              <div class="flex items-center justify-between text-[11px] text-slate-400">
+                <span class="uppercase tracking-wider font-semibold text-gold-600">${item.category}</span>
+                <span class="text-emerald-700 font-medium">Fresh Daily</span>
+              </div>
+              <h4 class="font-serif font-bold text-base text-slate-900 leading-snug">${item.name}</h4>
+              <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed">${item.description}</p>
+            </div>
+          </div>
+
+          <div class="p-5 pt-0">
+            <button onclick="addToCart('${item.id}', 1)" class="w-full py-2.5 rounded-xl bg-gold-gradient text-azure-950 font-bold text-xs uppercase tracking-wider shadow hover:brightness-105 active:scale-98 transition-all flex items-center justify-center gap-1.5">
+              <span>+ Add to Order Tray</span>
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Initialize Page
+    renderBanner();
+    renderResortCards();
+    renderCategoryPills();
+    renderMenu();
+  </script>
+</body>
+</html>

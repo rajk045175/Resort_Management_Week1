@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking Confirmation & Voucher | Grand Azure Luxury Resort</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-pearl text-slate-800 antialiased flex flex-col min-h-screen">
+
+  <header class="sticky top-0 left-0 right-0 z-50 bg-azure-950/95 backdrop-blur-md border-b border-gold-400/20 py-3.5 print:hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <img src="images/logo.jpg" alt="Grand Azure Resort Logo" class="h-10 sm:h-12 w-auto rounded-lg object-contain border border-gold-400/40 shadow-glow-gold group-hover:border-gold-300 transition-all" />
+        <div class="flex flex-col">
+          <span class="font-serif tracking-widest text-lg sm:text-xl font-bold uppercase text-white">Grand Azure</span>
+          <span class="text-[10px] tracking-[0.25em] uppercase text-gold-300 font-medium -mt-1">Resort & Spa</span>
+        </div>
+      </a>
+      <div class="flex gap-4 text-xs font-semibold">
+        <a href="dashboard.html" class="text-gold-300 hover:underline">My Bookings</a>
+        <a href="index.html" class="text-slate-300 hover:text-white">Home</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 pb-20 print:p-0">
+    <!-- BANNER -->
+    <section class="bg-azure-950 text-white py-12 px-4 border-b border-gold-400/20 text-center space-y-3 print:hidden">
+      <div class="w-14 h-14 rounded-full bg-emerald-500/20 border border-emerald-400 text-emerald-400 flex items-center justify-center mx-auto text-2xl font-bold">
+        ✓
+      </div>
+      <span class="text-xs font-bold uppercase tracking-[0.25em] text-gold-300 block">Reservation Confirmed (INR ₹)</span>
+      <h1 class="font-serif text-3xl sm:text-4xl font-bold">We Look Forward to Welcoming You</h1>
+      <p class="text-xs text-slate-300 max-w-md mx-auto">Your stay at Grand Azure Atoll has been authorized and confirmed. Your official voucher is ready below.</p>
+    </section>
+
+    <!-- PRINT & MODAL BAR -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 flex justify-between items-center text-xs print:hidden">
+      <a href="dashboard.html" class="font-bold text-azure-900 hover:text-gold-600">← Return to Guest Portal</a>
+      <div class="flex gap-3">
+        <button onclick="toggleEmailModal(true)" class="px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:border-gold-400 font-semibold shadow-sm">
+          Simulated Email Preview
+        </button>
+        <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-azure-950 text-gold-300 font-bold uppercase tracking-wider hover:bg-azure-900 shadow">
+          Print Voucher / PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- PRINTABLE VOUCHER CARD -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-luxury p-8 sm:p-12 space-y-8 printable-card">
+        <!-- Top Voucher Header -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-slate-200">
+          <div>
+            <h2 class="font-serif font-bold text-2xl uppercase tracking-wider text-azure-950">Grand Azure Resort & Spa</h2>
+            <p class="text-xs text-slate-500">South Palm Atoll, Postcode 88402</p>
+            <p class="text-xs text-slate-500">+91 (800) 555-AZURE • concierge@grandazure.com</p>
+          </div>
+          <div class="sm:text-right">
+            <span class="text-[10px] uppercase font-bold text-slate-400 block tracking-widest">Confirmation Reference</span>
+            <span id="vBookingNum" class="font-mono text-2xl font-bold text-azure-950"></span>
+            <span class="block mt-1 px-3 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-wider border border-emerald-200 w-fit sm:ml-auto">
+              Status: Confirmed & Paid
+            </span>
+          </div>
+        </div>
+
+        <!-- Guest & Schedule Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-xs text-slate-600">
+          <div class="space-y-1.5">
+            <h4 class="font-serif font-bold text-sm text-slate-900 border-b pb-1">Guest Information</h4>
+            <p><strong>Primary Dignitary:</strong> <span id="vGuestName"></span></p>
+            <p><strong>Email Address:</strong> <span id="vGuestEmail"></span></p>
+            <p><strong>Phone:</strong> <span id="vGuestPhone"></span></p>
+            <p id="vSpecialReqRow" class="italic pt-1 text-slate-500"></p>
+          </div>
+
+          <div class="space-y-1.5">
+            <h4 class="font-serif font-bold text-sm text-slate-900 border-b pb-1">Stay Schedule</h4>
+            <p><strong>Check-In Date:</strong> <span id="vCheckIn"></span> (from 3:00 PM)</p>
+            <p><strong>Check-Out Date:</strong> <span id="vCheckOut"></span> (until 12:00 PM)</p>
+            <p><strong>Duration:</strong> <span id="vNights"></span> Nights</p>
+            <p><strong>Occupants:</strong> <span id="vGuests"></span> Guests</p>
+          </div>
+        </div>
+
+        <!-- Suite Reserved Card -->
+        <div class="p-6 rounded-2xl bg-pearl border border-slate-200 space-y-3">
+          <h4 class="font-serif font-bold text-base text-slate-900">Sanctuary Reserved</h4>
+          <div class="flex flex-col sm:flex-row gap-4 items-center">
+            <img id="vRoomImg" src="" alt="Sanctuary" class="w-full sm:w-36 h-24 rounded-xl object-cover" />
+            <div class="flex-1 text-xs space-y-1">
+              <h5 id="vRoomName" class="font-serif font-bold text-base text-slate-900"></h5>
+              <p id="vRoomDetails" class="text-slate-500"></p>
+              <p class="text-emerald-700 font-semibold pt-1">✓ Includes 24/7 dedicated royal butler, welcome champagne & private plunge pool.</p>
+            </div>
+          </div>
+          <div id="vPkgArea" class="pt-2 border-t border-slate-200 hidden">
+            <span class="text-[10px] uppercase font-bold text-gold-600">Included Curated Experience:</span>
+            <p id="vPkgTitle" class="font-serif font-bold text-slate-900 text-sm"></p>
+          </div>
+        </div>
+
+        <!-- Food items list (if any) -->
+        <div id="vFoodArea" class="space-y-2 hidden">
+          <h4 class="font-serif font-bold text-sm text-slate-900 border-b pb-1">Destination Dining Orders Attached</h4>
+          <div id="vFoodList" class="divide-y divide-slate-100 text-xs"></div>
+        </div>
+
+        <!-- Financial Breakdown (INR) -->
+        <div class="pt-4 border-t border-slate-200 space-y-2 text-xs text-slate-600">
+          <div class="flex justify-between"><span>Sanctuary Subtotal:</span><span id="vRoomSub" class="font-semibold text-slate-800"></span></div>
+          <div id="vPkgRow" class="flex justify-between text-gold-700 hidden"><span>Curated Package:</span><span id="vPkgSub" class="font-semibold"></span></div>
+          <div id="vFoodRow" class="flex justify-between hidden"><span>Dining Subtotal:</span><span id="vFoodSub" class="font-semibold"></span></div>
+          <div id="vExtrasRow" class="flex justify-between hidden"><span>VIP Extras:</span><span id="vExtrasSub" class="font-semibold"></span></div>
+          <div id="vDiscRow" class="flex justify-between text-emerald-600 hidden"><span>Discount:</span><span id="vDiscSub" class="font-semibold"></span></div>
+          <div class="flex justify-between"><span>Luxury GST (18%):</span><span id="vTax" class="font-semibold text-slate-800"></span></div>
+          <div class="pt-2 border-t border-slate-200 flex justify-between font-bold text-base text-slate-900">
+            <span>Total Paid (INR):</span>
+            <span id="vTotal" class="text-2xl font-serif text-gold-600"></span>
+          </div>
+          <div class="flex justify-between text-[11px] text-slate-400 pt-1">
+            <span>Payment Rail: <span id="vMethod" class="font-semibold text-slate-700"></span></span>
+            <span>Transaction ID: <span id="vTxn" class="font-mono"></span></span>
+          </div>
+        </div>
+
+        <!-- Footer Sign-off -->
+        <div class="pt-6 border-t border-slate-200 flex justify-between items-center text-xs text-slate-400">
+          <div>
+            <p class="font-serif font-bold text-slate-700">Official Resort Stamp</p>
+            <p class="text-[10px]">Grand Azure Operations Directorate</p>
+          </div>
+          <div class="text-right">
+            <p class="font-serif italic text-slate-700 text-sm">Alexander Vance</p>
+            <p class="text-[10px]">Managing General Director</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- EMAIL PREVIEW MODAL -->
+  <div id="emailModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-azure-950/80 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-4 shadow-2xl border border-slate-200">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+        <h4 class="font-serif font-bold text-base text-slate-900">Simulated Confirmation Email</h4>
+        <button onclick="toggleEmailModal(false)" class="text-slate-400 hover:text-slate-700 font-bold">✕</button>
+      </div>
+
+      <div class="p-3 bg-slate-50 rounded-xl text-xs space-y-1 text-slate-600">
+        <p><strong>To:</strong> <span id="eMailTo"></span></p>
+        <p><strong>From:</strong> reservations@grandazure.com</p>
+        <p><strong>Subject:</strong> Your Luxury Stay at Grand Azure Resort is Confirmed</p>
+      </div>
+
+      <div class="p-4 rounded-xl bg-pearl border border-gold-200 text-xs text-slate-700 space-y-3 leading-relaxed">
+        <p>Dear <span id="eGuestName" class="font-bold"></span>,</p>
+        <p>
+          We are delighted to confirm your upcoming reservation at <strong>Grand Azure Resort & Spa</strong>. Your sanctuary is fully prepared for your arrival.
+        </p>
+        <p>
+          Your dedicated butler Master Sebastian has received your itinerary and will await you at our private arrivals lounge.
+        </p>
+        <p class="font-serif font-bold text-azure-950">
+          Warmest Regards,<br>
+          The Royal Concierge Directorate<br>
+          Grand Azure Luxury Resort & Spa
+        </p>
+      </div>
+
+      <button onclick="toggleEmailModal(false)" class="w-full py-2.5 rounded-xl bg-azure-950 text-gold-300 font-bold text-xs uppercase tracking-wider">
+        Close Email
+      </button>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const bookingId = urlParams.get('id');
+
+    const bookings = getBookings();
+    const b = bookings.find(item => item.id === bookingId || item.bookingNumber === bookingId) || bookings[0];
+
+    document.getElementById('vBookingNum').textContent = b.bookingNumber;
+    document.getElementById('vGuestName').textContent = b.guestName;
+    document.getElementById('vGuestEmail').textContent = b.guestEmail;
+    document.getElementById('vGuestPhone').textContent = b.guestPhone;
+
+    if (b.specialRequests) {
+      document.getElementById('vSpecialReqRow').textContent = `Special Requests: "${b.specialRequests}"`;
+    }
+
+    document.getElementById('vCheckIn').textContent = b.checkInDate;
+    document.getElementById('vCheckOut').textContent = b.checkOutDate;
+    document.getElementById('vNights').textContent = b.totalNights;
+    document.getElementById('vGuests').textContent = b.adults;
+
+    document.getElementById('vRoomImg').src = b.room?.images?.[0] || 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80';
+    document.getElementById('vRoomName').textContent = b.room?.name || b.roomName || 'Luxury Sanctuary';
+    document.getElementById('vRoomDetails').textContent = `${b.room?.architecturalStyle || b.room?.type || 'Sanctuary'} • ${b.room?.viewType || 'Ocean View'}`;
+
+    if (b.packageName || b.package) {
+      document.getElementById('vPkgArea').classList.remove('hidden');
+      document.getElementById('vPkgTitle').textContent = b.packageName || b.package?.name;
+      document.getElementById('vPkgRow').classList.remove('hidden');
+      document.getElementById('vPkgSub').textContent = `+${formatINR(b.packageSubtotal || 0)}`;
+    }
+
+    // Food items
+    if (b.foodItems && b.foodItems.length > 0) {
+      document.getElementById('vFoodArea').classList.remove('hidden');
+      document.getElementById('vFoodRow').classList.remove('hidden');
+      document.getElementById('vFoodSub').textContent = `+${formatINR(b.foodSubtotal || 0)}`;
+
+      const foodList = document.getElementById('vFoodList');
+      foodList.innerHTML = b.foodItems.map(item => `
+        <div class="py-1.5 flex justify-between">
+          <span>${item.quantity} × ${item.menuItem?.name || item.itemName}</span>
+          <span class="font-bold">${formatINR((item.menuItem?.price || item.price || 0) * item.quantity)}</span>
+        </div>
+      `).join('');
+    }
+
+    if (b.additionalServicesTotal > 0) {
+      document.getElementById('vExtrasRow').classList.remove('hidden');
+      document.getElementById('vExtrasSub').textContent = `+${formatINR(b.additionalServicesTotal)}`;
+    }
+    if (b.discountAmount > 0) {
+      document.getElementById('vDiscRow').classList.remove('hidden');
+      document.getElementById('vDiscSub').textContent = `-${formatINR(b.discountAmount)}`;
+    }
+
+    document.getElementById('vRoomSub').textContent = formatINR(b.roomSubtotal);
+    document.getElementById('vTax').textContent = formatINR(b.taxAmount);
+    document.getElementById('vTotal').textContent = formatINR(b.finalTotal);
+    document.getElementById('vMethod').textContent = b.paymentMethod || 'CARD';
+    document.getElementById('vTxn').textContent = b.transactionId || 'txn_confirmed';
+
+    // Email modal fields
+    document.getElementById('eMailTo').textContent = b.guestEmail;
+    document.getElementById('eGuestName').textContent = b.guestName;
+
+    function toggleEmailModal(open) {
+      const modal = document.getElementById('emailModal');
+      if (open) modal.classList.remove('hidden');
+      else modal.classList.add('hidden');
+    }
+  </script>
+</body>
+</html>

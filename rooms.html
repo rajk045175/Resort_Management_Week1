@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The 10 Architectural Sanctuaries | Grand Azure Luxury Resort</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-pearl text-slate-800 antialiased flex flex-col min-h-screen">
+
+  <!-- NAVBAR -->
+  <header class="sticky top-0 left-0 right-0 z-50 bg-azure-950/95 backdrop-blur-md border-b border-gold-400/20 py-3.5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <img src="images/logo.jpg" alt="Grand Azure Resort Logo" class="h-10 sm:h-12 w-auto rounded-lg object-contain border border-gold-400/40 shadow-glow-gold group-hover:border-gold-300 transition-all" />
+        <div class="flex flex-col">
+          <span class="font-serif tracking-widest text-lg sm:text-xl font-bold uppercase text-white">Grand Azure</span>
+          <span class="text-[10px] tracking-[0.25em] uppercase text-gold-300 font-medium -mt-1">Resort & Spa</span>
+        </div>
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-7 text-sm font-medium tracking-wide">
+        <a href="index.html" class="text-slate-200 hover:text-gold-300">Home</a>
+        <a href="rooms.html" class="text-gold-300 font-semibold border-b-2 border-gold-400 pb-0.5">Sanctuaries & Suites</a>
+        <a href="packages.html" class="text-slate-200 hover:text-gold-300">Curated Packages</a>
+        <a href="dining.html" class="text-slate-200 hover:text-gold-300">Destination Dining</a>
+        <a href="dashboard.html" class="text-slate-200 hover:text-gold-300">Guest Dashboard</a>
+        <a href="admin.html" class="text-gold-300 font-semibold">Admin Portal</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <button onclick="toggleCartDrawer(true)" class="relative p-2 text-slate-200 hover:text-gold-300" title="Dining Tray">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+          <span id="cartBadge" class="absolute -top-1 -right-1 bg-gold-400 text-azure-950 text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
+        </button>
+        <a href="auth.html" id="navUserBtn" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full border border-gold-400/40 bg-azure-900/60 text-slate-200 text-xs font-medium">Sign In</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- BANNER -->
+  <main class="flex-1 pb-20">
+    <section class="bg-azure-950 text-white py-14 px-4 border-b border-gold-400/20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-2">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-gold-300/30 bg-azure-900/60 text-gold-300 text-[10px] font-bold uppercase tracking-widest">
+          ★ 10 Distinctive Architectural Sanctuaries
+        </div>
+        <h1 class="font-serif text-3xl sm:text-5xl font-bold">The Sovereign Sanctuary Collection</h1>
+        <p class="text-xs sm:text-sm text-slate-300 max-w-2xl font-light">
+          No two sanctuaries share the same design. From overwater palaces and clifftop lotus pavilions to beachfront sand villas and sacred banyan residences, each stay commands dedicated personal butler service.
+        </p>
+      </div>
+    </section>
+
+    <!-- MAIN CONTENT: FILTERS & GRID -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <!-- SIDEBAR FILTERS -->
+        <aside class="lg:col-span-1 space-y-6">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6 sticky top-24">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <h3 class="font-serif font-bold text-base text-slate-900">Filter Sanctuaries</h3>
+              <button onclick="resetFilters()" class="text-xs text-gold-600 hover:underline">Reset</button>
+            </div>
+
+            <!-- Search -->
+            <div>
+              <label class="text-xs font-bold uppercase text-slate-700 block mb-1">Search Keywords</label>
+              <input type="text" id="filterSearch" placeholder="Kohinoor, Lotus, Overwater, Sky..." oninput="applyFilters()" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-gold-400" />
+            </div>
+
+            <!-- Category -->
+            <div>
+              <label class="text-xs font-bold uppercase text-slate-700 block mb-1">Sanctuary Archetype</label>
+              <select id="filterType" onchange="applyFilters()" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-gold-400">
+                <option value="All Types">All 10 Sanctuaries</option>
+                <option value="Overwater Palace">Overwater Palaces</option>
+                <option value="Sky Penthouse">Sky Penthouses</option>
+                <option value="Overwater Haven">Overwater Reef Havens</option>
+                <option value="Lotus Sanctuary">Lotus Clifftop Sanctuaries</option>
+                <option value="Beach Villa">Beachfront Sand Villas</option>
+                <option value="Garden Pavilion">Sacred Garden Pavilions</option>
+                <option value="Ocean Estate">Ocean Sunset Estates</option>
+                <option value="Monsoon Residence">Monsoon Royal Residences</option>
+                <option value="Hillside Estate">Hillside Mist Estates</option>
+                <option value="Dune Cottage">Pearl Dune Cottages</option>
+              </select>
+            </div>
+
+            <!-- Price Slider (INR) -->
+            <div class="space-y-1">
+              <div class="flex justify-between text-xs font-bold text-slate-700">
+                <span>Maximum Rate</span>
+                <span id="priceDisplay" class="text-gold-600 font-bold">₹1,00,000</span>
+              </div>
+              <input type="range" id="filterPrice" min="25000" max="100000" step="5000" value="100000" oninput="applyFilters()" class="w-full accent-gold-500 cursor-pointer" />
+              <div class="flex justify-between text-[10px] text-slate-400"><span>₹25,000</span><span>₹1,00,000+</span></div>
+            </div>
+
+            <!-- Minimum Guests -->
+            <div>
+              <label class="text-xs font-bold uppercase text-slate-700 block mb-1.5">Guests Capacity</label>
+              <div class="grid grid-cols-4 gap-1.5" id="guestBtnGroup">
+                <button type="button" onclick="setGuestFilter(1)" class="guest-btn py-1.5 rounded-lg border text-xs font-bold bg-azure-950 text-gold-300 border-azure-950">1+</button>
+                <button type="button" onclick="setGuestFilter(2)" class="guest-btn py-1.5 rounded-lg border text-xs font-bold bg-slate-50 border-slate-200 text-slate-700">2+</button>
+                <button type="button" onclick="setGuestFilter(4)" class="guest-btn py-1.5 rounded-lg border text-xs font-bold bg-slate-50 border-slate-200 text-slate-700">4+</button>
+                <button type="button" onclick="setGuestFilter(6)" class="guest-btn py-1.5 rounded-lg border text-xs font-bold bg-slate-50 border-slate-200 text-slate-700">6+</button>
+              </div>
+            </div>
+
+            <!-- Only Available Toggle -->
+            <div>
+              <label class="flex items-center gap-2 cursor-pointer text-xs font-semibold text-slate-700">
+                <input type="checkbox" id="filterOnlyAvailable" onchange="applyFilters()" class="rounded accent-gold-500 w-4 h-4" />
+                <span>Available Sanctuaries Only</span>
+              </label>
+            </div>
+
+            <!-- Amenities -->
+            <div class="space-y-2 pt-2 border-t border-slate-100">
+              <label class="text-xs font-bold uppercase text-slate-700 block">Featured Amenities</label>
+              <div class="space-y-1.5 max-h-40 overflow-y-auto text-xs text-slate-600">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" value="Pool" onchange="applyFilters()" class="amenity-cb rounded accent-gold-500" />
+                  <span>Private Infinity Pool</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" value="Butler" onchange="applyFilters()" class="amenity-cb rounded accent-gold-500" />
+                  <span>24/7 Dedicated Butler</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" value="Lagoon" onchange="applyFilters()" class="amenity-cb rounded accent-gold-500" />
+                  <span>Direct Lagoon Access</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" value="Jacuzzi" onchange="applyFilters()" class="amenity-cb rounded accent-gold-500" />
+                  <span>Private Jacuzzi</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" value="Spa" onchange="applyFilters()" class="amenity-cb rounded accent-gold-500" />
+                  <span>Private Spa Pavilion</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- ROOMS RESULTS -->
+        <section class="lg:col-span-3 space-y-6">
+          <div class="flex items-center justify-between text-xs text-slate-500">
+            <p>Showing <strong id="resultsCount" class="text-slate-800">0</strong> unique sanctuaries in Indian Rupees (₹)</p>
+          </div>
+
+          <div id="roomsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Injected by JS -->
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- CART DRAWER -->
+  <div id="cartDrawer" class="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white shadow-2xl transition-transform duration-300 transform translate-x-full flex flex-col">
+    <div class="p-5 bg-azure-950 text-white flex items-center justify-between border-b border-gold-400/20">
+      <h3 class="font-serif font-bold text-base text-white">Your Dining Tray</h3>
+      <button onclick="toggleCartDrawer(false)" class="text-slate-300 hover:text-white text-lg">✕</button>
+    </div>
+    <div id="cartDrawerContent" class="flex-1 overflow-y-auto p-5"></div>
+    <div id="cartDrawerFooter" class="p-5 bg-slate-50 border-t border-slate-200 space-y-3 hidden">
+      <div class="text-xs text-slate-600 space-y-1">
+        <div class="flex justify-between"><span>Subtotal:</span><span id="cartDrawerSubtotal" class="font-bold">₹0</span></div>
+        <div class="flex justify-between"><span>Resort GST (18%):</span><span id="cartDrawerTax">₹0</span></div>
+        <div class="flex justify-between font-bold text-slate-900 border-t pt-1 text-sm"><span>Total:</span><span id="cartDrawerTotal" class="text-gold-600">₹0</span></div>
+      </div>
+      <a href="checkout.html" class="block w-full py-3 rounded-xl bg-gold-gradient text-azure-950 text-center font-bold text-xs uppercase tracking-wider shadow">Proceed with Order</a>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    let currentMinGuests = 1;
+
+    // Parse URL params for pre-filtered search from homepage
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('type') && urlParams.get('type') !== 'All Types') {
+      document.getElementById('filterType').value = urlParams.get('type');
+    }
+    if (urlParams.get('guests')) {
+      currentMinGuests = Number(urlParams.get('guests'));
+    }
+
+    function setGuestFilter(num) {
+      currentMinGuests = num;
+      document.querySelectorAll('.guest-btn').forEach((btn, idx) => {
+        const val = [1, 2, 4, 6][idx];
+        if (val === num) {
+          btn.className = 'guest-btn py-1.5 rounded-lg border text-xs font-bold bg-azure-950 text-gold-300 border-azure-950';
+        } else {
+          btn.className = 'guest-btn py-1.5 rounded-lg border text-xs font-bold bg-slate-50 border-slate-200 text-slate-700';
+        }
+      });
+      applyFilters();
+    }
+
+    function resetFilters() {
+      document.getElementById('filterSearch').value = '';
+      document.getElementById('filterType').value = 'All Types';
+      document.getElementById('filterPrice').value = '100000';
+      document.getElementById('filterOnlyAvailable').checked = false;
+      document.querySelectorAll('.amenity-cb').forEach(cb => cb.checked = false);
+      setGuestFilter(1);
+    }
+
+    function applyFilters() {
+      const search = document.getElementById('filterSearch').value.toLowerCase();
+      const type = document.getElementById('filterType').value;
+      const maxPrice = Number(document.getElementById('filterPrice').value);
+      const onlyAvailable = document.getElementById('filterOnlyAvailable').checked;
+
+      document.getElementById('priceDisplay').textContent = formatINR(maxPrice);
+
+      const selectedAmenities = Array.from(document.querySelectorAll('.amenity-cb:checked')).map(cb => cb.value.toLowerCase());
+
+      const allRooms = getRooms();
+      const filtered = allRooms.filter(room => {
+        if (type !== 'All Types') {
+          const typeLower = type.toLowerCase();
+          const roomTypeLower = (room.type || '').toLowerCase();
+          const archLower = (room.architecturalStyle || '').toLowerCase();
+          const nameLower = (room.name || '').toLowerCase();
+          if (!roomTypeLower.includes(typeLower) && !archLower.includes(typeLower) && !nameLower.includes(typeLower)) return false;
+        }
+        if (room.pricePerNight > maxPrice) return false;
+        if (room.capacity < currentMinGuests) return false;
+        if (onlyAvailable && room.status !== 'AVAILABLE') return false;
+        if (search && !room.name.toLowerCase().includes(search) && !room.description.toLowerCase().includes(search) && !(room.architecturalStyle || '').toLowerCase().includes(search)) return false;
+        if (selectedAmenities.length > 0) {
+          const hasAll = selectedAmenities.every(a => room.amenities.some(item => item.toLowerCase().includes(a)));
+          if (!hasAll) return false;
+        }
+        return true;
+      });
+
+      document.getElementById('resultsCount').textContent = filtered.length;
+
+      const grid = document.getElementById('roomsGrid');
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-2 bg-white rounded-3xl p-12 text-center border border-slate-200 space-y-3">
+            <h4 class="font-serif text-lg font-bold text-slate-800">No Sanctuaries Match Criteria</h4>
+            <p class="text-xs text-slate-500">Try adjusting your price ceiling, guest requirements, or clearing filters.</p>
+            <button onclick="resetFilters()" class="px-5 py-2 rounded-xl bg-gold-gradient text-azure-950 text-xs font-bold uppercase tracking-wider">Reset Filters</button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(room => {
+        const isAvail = room.status === 'AVAILABLE';
+        return `
+          <div class="bg-white rounded-2xl overflow-hidden shadow-luxury hover:shadow-luxury-hover border border-slate-200/80 transition-all flex flex-col justify-between">
+            <div>
+              <div class="relative h-60 overflow-hidden bg-slate-900">
+                <img src="${room.images[0]}" alt="${room.name}" class="w-full h-full object-cover" />
+                <div class="absolute top-4 left-4 flex flex-col gap-1">
+                  <span class="px-3 py-1 rounded-full bg-azure-950/85 text-gold-300 text-[10px] font-bold uppercase tracking-wider border border-gold-400/30">
+                    ${room.architecturalStyle || room.type}
+                  </span>
+                </div>
+                <div class="absolute top-4 right-4">
+                  <span class="px-3 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${isAvail ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-400/40' : 'bg-rose-950/80 text-rose-300 border border-rose-400/40'}">
+                    ${room.status}
+                  </span>
+                </div>
+                <div class="absolute bottom-4 left-4 right-4 text-white flex justify-between items-end">
+                  <span class="text-xs text-slate-200">${room.viewType}</span>
+                  <div class="text-right">
+                    <span class="text-2xl font-serif font-bold text-gold-300">${formatINR(room.pricePerNight)}</span>
+                    <span class="text-[10px] text-slate-300">/ night</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-6 space-y-3">
+                <h3 class="font-serif font-bold text-xl text-slate-900 leading-snug">${room.name}</h3>
+                <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed">${room.description}</p>
+                <div class="grid grid-cols-3 gap-2 py-3 border-y border-slate-100 text-xs text-slate-600 text-center">
+                  <span>Up to ${room.capacity} Guests</span>
+                  <span class="truncate">${room.bedType}</span>
+                  <span>${room.sizeSqFt} sq ft</span>
+                </div>
+                <div class="flex flex-wrap gap-1 pt-1">
+                  ${room.amenities.slice(0, 3).map(a => `<span class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[10px]">${a}</span>`).join('')}
+                </div>
+              </div>
+            </div>
+
+            <div class="p-6 pt-0 flex gap-3">
+              <a href="room-details.html?id=${room.id}" class="flex-1 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-xs font-semibold text-center hover:border-gold-400 transition-colors">View Details</a>
+              <a href="checkout.html?roomId=${room.id}" class="flex-1 py-2.5 rounded-xl bg-gold-gradient text-azure-950 text-xs font-bold text-center uppercase tracking-wider shadow hover:brightness-105 transition-all">Reserve</a>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Initial Filter Load
+    applyFilters();
+  </script>
+</body>
+</html>

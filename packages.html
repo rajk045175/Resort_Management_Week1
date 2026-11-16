@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Curated Resort Packages | Grand Azure Luxury Resort</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-pearl text-slate-800 antialiased flex flex-col min-h-screen">
+
+  <header class="sticky top-0 left-0 right-0 z-50 bg-azure-950/95 backdrop-blur-md border-b border-gold-400/20 py-3.5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <img src="images/logo.jpg" alt="Grand Azure Resort Logo" class="h-10 sm:h-12 w-auto rounded-lg object-contain border border-gold-400/40 shadow-glow-gold group-hover:border-gold-300 transition-all" />
+        <div class="flex flex-col">
+          <span class="font-serif tracking-widest text-lg sm:text-xl font-bold uppercase text-white">Grand Azure</span>
+          <span class="text-[10px] tracking-[0.25em] uppercase text-gold-300 font-medium -mt-1">Resort & Spa</span>
+        </div>
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-7 text-sm font-medium tracking-wide">
+        <a href="index.html" class="text-slate-200 hover:text-gold-300">Home</a>
+        <a href="rooms.html" class="text-slate-200 hover:text-gold-300">Sanctuaries & Suites</a>
+        <a href="packages.html" class="text-gold-300 font-semibold border-b-2 border-gold-400 pb-0.5">Curated Packages</a>
+        <a href="dining.html" class="text-slate-200 hover:text-gold-300">Destination Dining</a>
+        <a href="dashboard.html" class="text-slate-200 hover:text-gold-300">Guest Dashboard</a>
+        <a href="admin.html" class="text-gold-300 font-semibold">Admin Portal</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <button onclick="toggleCartDrawer(true)" class="relative p-2 text-slate-200 hover:text-gold-300" title="Dining Tray">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+          <span id="cartBadge" class="absolute -top-1 -right-1 bg-gold-400 text-azure-950 text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
+        </button>
+        <a href="auth.html" id="navUserBtn" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full border border-gold-400/40 bg-azure-900/60 text-slate-200 text-xs font-medium">Sign In</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 pb-20">
+    <section class="bg-azure-950 text-white py-14 px-4 border-b border-gold-400/20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
+        <span class="text-xs font-bold uppercase tracking-[0.25em] text-gold-300">Bespoke Itineraries In Indian Rupees (₹)</span>
+        <h1 class="font-serif text-3xl sm:text-5xl font-bold">Exclusive Curated Packages</h1>
+        <p class="text-xs sm:text-sm text-slate-300 max-w-2xl font-light">
+          Immerse yourself in our all-inclusive bespoke stay experiences. Featuring private catamaran charters, candlelight lagoon dinners, royal Ayurvedic treatments, and dedicated personal butler attendance.
+        </p>
+
+        <!-- Duration Filters -->
+        <div class="flex flex-wrap gap-2 pt-3" id="durationFilters">
+          <button onclick="filterPackages('ALL')" class="duration-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-gold-gradient text-azure-950 shadow">All Experiences</button>
+          <button onclick="filterPackages(2)" class="duration-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-azure-900 border border-white/10 text-slate-300 hover:border-gold-300">2 Nights (Weekend Escapes)</button>
+          <button onclick="filterPackages(3)" class="duration-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-azure-900 border border-white/10 text-slate-300 hover:border-gold-300">3 Nights (Signature Retreats)</button>
+          <button onclick="filterPackages(5)" class="duration-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-azure-900 border border-white/10 text-slate-300 hover:border-gold-300">5 Nights (Immersion)</button>
+          <button onclick="filterPackages(7)" class="duration-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-azure-900 border border-white/10 text-slate-300 hover:border-gold-300">7 Nights (Royal Sovereign)</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 space-y-12">
+      <div id="packagesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    let activeDuration = 'ALL';
+
+    function filterPackages(dur) {
+      activeDuration = dur;
+      document.querySelectorAll('.duration-btn').forEach(btn => {
+        if ((dur === 'ALL' && btn.textContent.includes('All')) || (dur !== 'ALL' && btn.textContent.includes(`${dur} Nights`))) {
+          btn.className = 'duration-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-gold-gradient text-azure-950 shadow';
+        } else {
+          btn.className = 'duration-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-azure-900 border border-white/10 text-slate-300 hover:border-gold-300';
+        }
+      });
+      renderPackages();
+    }
+
+    function renderPackages() {
+      const allPkgs = getPackages();
+      const filtered = allPkgs.filter(p => {
+        if (!p.isActive) return false;
+        if (activeDuration !== 'ALL' && p.durationNights !== activeDuration) return false;
+        return true;
+      });
+
+      const container = document.getElementById('packagesContainer');
+      container.innerHTML = filtered.map(pkg => `
+        <div class="bg-white rounded-3xl overflow-hidden shadow-luxury hover:shadow-luxury-hover border border-slate-200/80 transition-all flex flex-col justify-between">
+          <div>
+            <div class="relative h-60 overflow-hidden bg-azure-950">
+              <img src="${pkg.image}" alt="${pkg.name}" class="w-full h-full object-cover" />
+              <div class="absolute top-4 left-4">
+                <span class="px-3.5 py-1 rounded-full bg-gold-gradient text-azure-950 text-xs font-bold uppercase tracking-wider shadow">
+                  ${pkg.durationNights} Nights Experience
+                </span>
+              </div>
+              <div class="absolute bottom-4 right-4 text-right">
+                <span class="text-2xl font-serif font-bold text-gold-300">${formatINR(pkg.price)}</span>
+                <span class="text-[10px] text-slate-300 ml-1">/ stay</span>
+              </div>
+            </div>
+
+            <div class="p-7 space-y-4">
+              <h3 class="font-serif font-bold text-xl text-slate-900">${pkg.name}</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">${pkg.description}</p>
+
+              <div class="pt-2">
+                <h4 class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">Included Inclusions:</h4>
+                <ul class="space-y-1.5 text-xs text-slate-700">
+                  ${pkg.includedPerks.map(perk => `
+                    <li class="flex items-start gap-2">
+                      <span class="text-gold-500 font-bold shrink-0">✓</span>
+                      <span>${perk}</span>
+                    </li>
+                  `).join('')}
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-7 pt-0 space-y-2">
+            <a href="checkout.html?packageId=${pkg.id}" class="block w-full py-3 rounded-xl bg-gold-gradient text-azure-950 font-bold text-xs uppercase text-center tracking-wider shadow hover:brightness-105 active:scale-98 transition-all">
+              Book Package (${formatINR(pkg.price)})
+            </a>
+            <p class="text-[10px] text-center text-slate-400 italic">${pkg.terms}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    renderPackages();
+  </script>
+</body>
+</html>

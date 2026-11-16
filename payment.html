@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Payment Gateway | Grand Azure Luxury Resort</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-pearl text-slate-800 antialiased flex flex-col min-h-screen">
+
+  <header class="sticky top-0 left-0 right-0 z-50 bg-azure-950/95 backdrop-blur-md border-b border-gold-400/20 py-3.5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <img src="images/logo.jpg" alt="Grand Azure Resort Logo" class="h-10 sm:h-12 w-auto rounded-lg object-contain border border-gold-400/40 shadow-glow-gold group-hover:border-gold-300 transition-all" />
+        <div class="flex flex-col">
+          <span class="font-serif tracking-widest text-lg sm:text-xl font-bold uppercase text-white">Grand Azure</span>
+          <span class="text-[10px] tracking-[0.25em] uppercase text-gold-300 font-medium -mt-1">Resort & Spa</span>
+        </div>
+      </a>
+      <div class="text-xs text-gold-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
+        <span>🔒 256-bit Encrypted Checkout (INR ₹)</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 pb-20">
+    <section class="bg-azure-950 text-white py-12 px-4 border-b border-gold-400/20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-2">
+        <span class="text-xs font-bold uppercase tracking-[0.25em] text-gold-300">Step 2 of 2: Payment Authorization</span>
+        <h1 class="font-serif text-3xl sm:text-4xl font-bold">Secure Indian Banking & Payment Gateway</h1>
+      </div>
+    </section>
+
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- LEFT 2 COLS: METHODS -->
+        <div class="md:col-span-2 space-y-6">
+          <!-- Method Tabs -->
+          <div class="grid grid-cols-4 gap-2 bg-slate-200/60 p-1.5 rounded-2xl text-xs font-bold">
+            <button onclick="setMethod('CARD')" id="tabCard" class="py-2.5 rounded-xl bg-azure-950 text-gold-300 shadow">Card</button>
+            <button onclick="setMethod('UPI')" id="tabUpi" class="py-2.5 rounded-xl text-slate-600 hover:text-azure-950">UPI / QR</button>
+            <button onclick="setMethod('NETBANKING')" id="tabNet" class="py-2.5 rounded-xl text-slate-600 hover:text-azure-950">NetBanking</button>
+            <button onclick="setMethod('WALLET')" id="tabWallet" class="py-2.5 rounded-xl text-slate-600 hover:text-azure-950">Wallets / EMI</button>
+          </div>
+
+          <!-- CARD FORM -->
+          <div id="methodCard" class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+            <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+              <span class="text-xs font-bold uppercase text-slate-700">Credit / Debit / Corporate Card</span>
+              <span class="text-[10px] text-slate-400 font-bold">RUPAY • VISA • MASTERCARD • AMEX</span>
+            </div>
+
+            <div class="space-y-3 text-xs">
+              <div>
+                <label class="font-bold uppercase text-slate-700 block mb-1">Card Number</label>
+                <input type="text" value="4532 •••• •••• 8892" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-mono text-sm tracking-wider font-semibold" />
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="font-bold uppercase text-slate-700 block mb-1">Expiry Date</label>
+                  <input type="text" value="08/29" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-mono" />
+                </div>
+                <div>
+                  <label class="font-bold uppercase text-slate-700 block mb-1">Security CVV</label>
+                  <input type="password" value="789" maxlength="4" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-mono" />
+                </div>
+              </div>
+              <div>
+                <label class="font-bold uppercase text-slate-700 block mb-1">Cardholder Name</label>
+                <input type="text" id="cardHolderInput" value="ADITYA VIKRAM SINGHANIA" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl uppercase font-semibold" />
+              </div>
+            </div>
+
+            <button onclick="processPayment()" id="payBtn" class="w-full py-4 rounded-xl bg-gold-gradient text-azure-950 font-bold text-xs uppercase tracking-widest shadow-lg hover:brightness-105 active:scale-98 transition-all mt-4 flex items-center justify-center gap-2">
+              <span>Authorize & Pay</span>
+            </button>
+          </div>
+
+          <!-- UPI FORM -->
+          <div id="methodUpi" class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4 hidden">
+            <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+              <span class="text-xs font-bold uppercase text-slate-700">UPI Instant Payment (Zero Surcharge)</span>
+              <span class="text-[10px] text-emerald-600 font-bold">PhonePe • GPay • Paytm • BHIM</span>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+              <div class="w-28 h-28 bg-white p-2 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center justify-center">
+                <!-- SVG QR Code -->
+                <svg class="w-20 h-20 text-azure-950" fill="currentColor" viewBox="0 0 24 24"><path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm8-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm14-2h4v4h-4v-4zm-6 0h4v2h-4v-2zm2 4h2v4h-2v-4zm4 0h2v4h-2v-4z"/></svg>
+                <span class="text-[9px] font-bold text-azure-900 tracking-tighter">BHIM UPI QR</span>
+              </div>
+              <div class="space-y-1">
+                <h5 class="font-serif font-bold text-slate-900 text-sm">Scan with Any Indian UPI App</h5>
+                <p class="text-xs text-slate-500">Scan to pay directly from your linked Indian Bank account.</p>
+                <div class="p-2 rounded-lg bg-azure-950 text-gold-300 font-mono text-xs font-bold inline-block">
+                  grandazure@hdfcbank
+                </div>
+              </div>
+            </div>
+
+            <div class="text-xs">
+              <label class="font-bold uppercase text-slate-700 block mb-1">Or Enter Your VPA / UPI ID</label>
+              <input type="text" value="aditya@okaxis" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-medium" />
+            </div>
+
+            <button onclick="processPayment()" class="w-full py-4 rounded-xl bg-gold-gradient text-azure-950 font-bold text-xs uppercase tracking-widest shadow-lg hover:brightness-105 active:scale-98 transition-all">
+              Verify & Pay with UPI
+            </button>
+          </div>
+
+          <!-- NETBANKING -->
+          <div id="methodNet" class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4 hidden">
+            <span class="text-xs font-bold uppercase text-slate-700 block pb-2 border-b border-slate-100">Select Premier Indian Bank</span>
+            <div class="grid grid-cols-2 gap-3 text-xs">
+              <div class="p-3 rounded-xl border border-azure-950 bg-azure-950 text-gold-300 font-semibold cursor-pointer">HDFC Bank (Instant)</div>
+              <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 font-semibold cursor-pointer hover:border-gold-400">ICICI Bank</div>
+              <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 font-semibold cursor-pointer hover:border-gold-400">State Bank of India (SBI)</div>
+              <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 font-semibold cursor-pointer hover:border-gold-400">Axis Bank</div>
+              <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 font-semibold cursor-pointer hover:border-gold-400">Kotak Mahindra Bank</div>
+              <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 font-semibold cursor-pointer hover:border-gold-400">Other Banks (50+)</div>
+            </div>
+            <button onclick="processPayment()" class="w-full py-4 rounded-xl bg-gold-gradient text-azure-950 font-bold text-xs uppercase tracking-widest shadow-lg mt-4">
+              Proceed to Bank Gateway
+            </button>
+          </div>
+
+          <!-- WALLETS -->
+          <div id="methodWallet" class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4 hidden">
+            <span class="text-xs font-bold uppercase text-slate-700 block pb-2 border-b border-slate-100">Digital Wallets & EMI Options</span>
+            <div class="grid grid-cols-2 gap-3 text-xs">
+              <div class="p-3 rounded-xl border border-azure-950 bg-azure-950 text-gold-300 font-semibold cursor-pointer">Paytm Wallet</div>
+              <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 font-semibold cursor-pointer hover:border-gold-400">Amazon Pay</div>
+              <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 font-semibold cursor-pointer hover:border-gold-400">Credit Card No-Cost EMI</div>
+              <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 font-semibold cursor-pointer hover:border-gold-400">Cred Pay</div>
+            </div>
+            <button onclick="processPayment()" class="w-full py-4 rounded-xl bg-gold-gradient text-azure-950 font-bold text-xs uppercase tracking-widest shadow-lg mt-4">
+              Authenticate & Complete Order
+            </button>
+          </div>
+
+          <!-- PROCESSING OVERLAY MODAL -->
+          <div id="processingModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-azure-950/85 backdrop-blur-md hidden">
+            <div class="bg-white rounded-3xl max-w-sm w-full p-8 text-center space-y-4 shadow-2xl">
+              <div id="spinner" class="w-12 h-12 rounded-full border-4 border-gold-400 border-t-transparent animate-spin mx-auto"></div>
+              <div id="checkIcon" class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto text-2xl hidden">✓</div>
+              <h4 id="procTitle" class="font-serif font-bold text-lg text-slate-900">Contacting Indian Banking Gateway...</h4>
+              <p id="procSub" class="text-xs text-slate-500">Please do not refresh or close your browser.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COL: SUMMARY (INR) -->
+        <div class="space-y-4">
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-3 text-xs">
+            <h4 class="font-serif font-bold text-base text-slate-900 pb-2 border-b border-slate-100">Payable Summary (INR)</h4>
+            <div class="space-y-1.5 text-slate-600">
+              <p><strong>Primary Dignitary:</strong> <span id="payGuest"></span></p>
+              <p><strong>Sanctuary:</strong> <span id="payRoom"></span></p>
+              <p><strong>Stay:</strong> <span id="payDates"></span></p>
+            </div>
+            <div class="pt-2 border-t border-slate-100 space-y-1">
+              <div class="flex justify-between"><span>Sanctuary:</span><span id="payRoomSub"></span></div>
+              <div id="payPkgRow" class="flex justify-between text-gold-700 hidden"><span>Package:</span><span id="payPkgSub"></span></div>
+              <div id="payFoodRow" class="flex justify-between hidden"><span>Dining:</span><span id="payFoodSub"></span></div>
+              <div id="payExtrasRow" class="flex justify-between hidden"><span>VIP Extras:</span><span id="payExtrasSub"></span></div>
+              <div id="payDiscRow" class="flex justify-between text-emerald-600 hidden"><span>Discount:</span><span id="payDiscSub"></span></div>
+              <div class="flex justify-between"><span>Luxury GST (18%):</span><span id="payTax"></span></div>
+              <div class="flex justify-between pt-2 border-t border-slate-200 font-bold text-sm text-slate-900">
+                <span>Amount Due:</span>
+                <span id="payFinalTotal" class="text-xl font-serif text-gold-600"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-azure-950 text-slate-300 text-[11px] space-y-1.5 border border-gold-400/20">
+            <p class="font-bold text-gold-300">Level 1 PCI-DSS & RBI Compliant</p>
+            <p class="text-slate-400">Card details are never saved on our servers. Transactions are tokenized end-to-end with 3D Secure OTP verification.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    const checkoutData = JSON.parse(sessionStorage.getItem('grand_azure_checkout') || '{}');
+    if (!checkoutData.roomId) {
+      window.location.href = 'checkout.html';
+    }
+
+    document.getElementById('payGuest').textContent = checkoutData.guestName;
+    document.getElementById('cardHolderInput').value = (checkoutData.guestName || 'ADITYA VIKRAM SINGHANIA').toUpperCase();
+    document.getElementById('payRoom').textContent = checkoutData.room?.name || 'Sanctuary';
+    document.getElementById('payDates').textContent = `${checkoutData.checkInDate} to ${checkoutData.checkOutDate} (${checkoutData.totalNights} nights)`;
+
+    document.getElementById('payRoomSub').textContent = formatINR(checkoutData.roomSubtotal);
+
+    if (checkoutData.packageSubtotal > 0) {
+      document.getElementById('payPkgRow').classList.remove('hidden');
+      document.getElementById('payPkgSub').textContent = `+${formatINR(checkoutData.packageSubtotal)}`;
+    }
+    if (checkoutData.foodSubtotal > 0) {
+      document.getElementById('payFoodRow').classList.remove('hidden');
+      document.getElementById('payFoodSub').textContent = `+${formatINR(checkoutData.foodSubtotal)}`;
+    }
+    if (checkoutData.additionalServicesTotal > 0) {
+      document.getElementById('payExtrasRow').classList.remove('hidden');
+      document.getElementById('payExtrasSub').textContent = `+${formatINR(checkoutData.additionalServicesTotal)}`;
+    }
+    if (checkoutData.discountAmount > 0) {
+      document.getElementById('payDiscRow').classList.remove('hidden');
+      document.getElementById('payDiscSub').textContent = `-${formatINR(checkoutData.discountAmount)}`;
+    }
+
+    document.getElementById('payTax').textContent = formatINR(checkoutData.taxAmount);
+    document.getElementById('payFinalTotal').textContent = formatINR(checkoutData.finalTotal);
+
+    let selectedMethod = 'CARD';
+
+    function setMethod(method) {
+      selectedMethod = method;
+      ['Card', 'Upi', 'Net', 'Wallet'].forEach(m => {
+        const tab = document.getElementById(`tab${m}`);
+        const panel = document.getElementById(`method${m}`);
+        if (m.toUpperCase() === method || (m === 'Net' && method === 'NETBANKING')) {
+          tab.className = 'py-2.5 rounded-xl bg-azure-950 text-gold-300 shadow';
+          panel.classList.remove('hidden');
+        } else {
+          tab.className = 'py-2.5 rounded-xl text-slate-600 hover:text-azure-950';
+          panel.classList.add('hidden');
+        }
+      });
+    }
+
+    function processPayment() {
+      const modal = document.getElementById('processingModal');
+      const spinner = document.getElementById('spinner');
+      const checkIcon = document.getElementById('checkIcon');
+      const procTitle = document.getElementById('procTitle');
+      const procSub = document.getElementById('procSub');
+
+      modal.classList.remove('hidden');
+
+      setTimeout(() => {
+        procTitle.textContent = 'Authenticating 3D Secure / OTP...';
+        procSub.textContent = 'Verifying banking token with RBI gateway...';
+
+        setTimeout(() => {
+          spinner.classList.add('hidden');
+          checkIcon.classList.remove('hidden');
+          procTitle.textContent = 'Payment Authorized & Confirmed!';
+          procSub.textContent = 'Issuing official GST invoice & reservation voucher...';
+
+          // Save Booking Record
+          const randomCode = Math.floor(1000 + Math.random() * 9000);
+          const newBooking = {
+            id: `b-${Date.now()}`,
+            bookingNumber: `AZR-2026-${randomCode}`,
+            guestName: checkoutData.guestName,
+            guestEmail: checkoutData.guestEmail,
+            guestPhone: checkoutData.guestPhone,
+            guestAddress: checkoutData.guestAddress,
+            specialRequests: checkoutData.specialRequests,
+            roomId: checkoutData.roomId,
+            roomName: checkoutData.room?.name,
+            room: checkoutData.room,
+            checkInDate: checkoutData.checkInDate,
+            checkOutDate: checkoutData.checkOutDate,
+            totalNights: checkoutData.totalNights,
+            adults: checkoutData.adults,
+            children: checkoutData.children,
+            packageId: checkoutData.packageId,
+            packageName: checkoutData.package?.name,
+            foodItems: checkoutData.foodItems,
+            roomSubtotal: checkoutData.roomSubtotal,
+            packageSubtotal: checkoutData.packageSubtotal,
+            foodSubtotal: checkoutData.foodSubtotal,
+            additionalServicesTotal: checkoutData.additionalServicesTotal,
+            taxAmount: checkoutData.taxAmount,
+            discountAmount: checkoutData.discountAmount,
+            finalTotal: checkoutData.finalTotal,
+            status: 'CONFIRMED',
+            paymentMethod: selectedMethod,
+            transactionId: `txn_${selectedMethod.toLowerCase()}_${Date.now()}`,
+            createdAt: new Date().toISOString(),
+          };
+
+          const allBookings = getBookings();
+          allBookings.unshift(newBooking);
+          setBookings(allBookings);
+
+          // Save Payment Record
+          const newPayment = {
+            id: `pay-${Date.now()}`,
+            paymentNumber: `PAY-AZR-${randomCode}`,
+            bookingNumber: newBooking.bookingNumber,
+            customerName: newBooking.guestName,
+            amount: newBooking.finalTotal,
+            method: selectedMethod,
+            status: 'COMPLETED',
+            transactionId: newBooking.transactionId,
+            paidAt: new Date().toISOString().split('T')[0],
+          };
+          const allPayments = getPayments();
+          allPayments.unshift(newPayment);
+          setPayments(allPayments);
+
+          // Clear cart
+          clearCart();
+
+          setTimeout(() => {
+            window.location.href = `confirmation.html?id=${newBooking.id}`;
+          }, 1200);
+        }, 1500);
+      }, 1200);
+    }
+  </script>
+</body>
+</html>

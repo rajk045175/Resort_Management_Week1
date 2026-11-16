@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sanctuary Details | Grand Azure Luxury Resort & Spa</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-pearl text-slate-800 antialiased flex flex-col min-h-screen">
+
+  <header class="sticky top-0 left-0 right-0 z-50 bg-azure-950/95 backdrop-blur-md border-b border-gold-400/20 py-3.5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <img src="images/logo.jpg" alt="Grand Azure Resort Logo" class="h-10 sm:h-12 w-auto rounded-lg object-contain border border-gold-400/40 shadow-glow-gold group-hover:border-gold-300 transition-all" />
+        <div class="flex flex-col">
+          <span class="font-serif tracking-widest text-lg sm:text-xl font-bold uppercase text-white">Grand Azure</span>
+          <span class="text-[10px] tracking-[0.25em] uppercase text-gold-300 font-medium -mt-1">Resort & Spa</span>
+        </div>
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-7 text-sm font-medium tracking-wide">
+        <a href="index.html" class="text-slate-200 hover:text-gold-300">Home</a>
+        <a href="rooms.html" class="text-gold-300 font-semibold border-b-2 border-gold-400 pb-0.5">Sanctuaries & Suites</a>
+        <a href="packages.html" class="text-slate-200 hover:text-gold-300">Curated Packages</a>
+        <a href="dining.html" class="text-slate-200 hover:text-gold-300">Destination Dining</a>
+        <a href="dashboard.html" class="text-slate-200 hover:text-gold-300">Guest Dashboard</a>
+        <a href="admin.html" class="text-gold-300 font-semibold">Admin Portal</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <button onclick="toggleCartDrawer(true)" class="relative p-2 text-slate-200 hover:text-gold-300">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+          <span id="cartBadge" class="absolute -top-1 -right-1 bg-gold-400 text-azure-950 text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
+        </button>
+        <a href="auth.html" id="navUserBtn" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full border border-gold-400/40 bg-azure-900/60 text-slate-200 text-xs font-medium">Sign In</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 pb-20">
+    <!-- Breadcrumb -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <a href="rooms.html" class="text-xs font-bold text-azure-900 hover:text-gold-600 flex items-center gap-1">
+        ← Back to All 10 Sanctuaries
+      </a>
+    </div>
+
+    <!-- Gallery Section -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+      <div class="relative h-[420px] sm:h-[500px] rounded-3xl overflow-hidden bg-slate-900 shadow-2xl">
+        <img id="mainImage" src="" alt="Sanctuary" class="w-full h-full object-cover transition-all duration-300" />
+        <div class="absolute top-6 left-6 flex flex-wrap gap-2">
+          <span id="roomTypeBadge" class="px-3.5 py-1.5 rounded-full bg-azure-950/85 backdrop-blur-md text-gold-300 text-xs font-bold uppercase tracking-wider border border-gold-400/30"></span>
+          <span id="roomViewBadge" class="px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md text-slate-800 text-xs font-semibold"></span>
+        </div>
+        <div class="absolute bottom-6 left-6 right-6 text-white flex justify-between items-end">
+          <div>
+            <h1 id="roomTitle" class="font-serif text-2xl sm:text-4xl font-bold"></h1>
+            <p id="roomSubtitle" class="text-xs text-slate-300 mt-1"></p>
+          </div>
+          <div class="text-right">
+            <span id="roomRate" class="text-3xl sm:text-4xl font-serif font-bold text-gold-300"></span>
+            <span class="text-xs text-slate-300 ml-1">/ night</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="thumbStrip" class="flex gap-4 overflow-x-auto pb-2">
+        <!-- Thumbnails injected by JS -->
+      </div>
+    </section>
+
+    <!-- Details & Booking Calculator Grid -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <!-- Left 2 Cols: Details -->
+        <div class="lg:col-span-2 space-y-8">
+          <!-- Specs -->
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm grid grid-cols-3 gap-4 text-center divide-x divide-slate-100 text-xs">
+            <div>
+              <p class="text-slate-400 uppercase font-bold text-[10px]">Capacity</p>
+              <p id="roomCapacity" class="font-bold text-slate-800 text-sm mt-1"></p>
+            </div>
+            <div>
+              <p class="text-slate-400 uppercase font-bold text-[10px]">Bedding</p>
+              <p id="roomBed" class="font-bold text-slate-800 text-sm mt-1"></p>
+            </div>
+            <div>
+              <p class="text-slate-400 uppercase font-bold text-[10px]">Interior Space</p>
+              <p id="roomSize" class="font-bold text-slate-800 text-sm mt-1"></p>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+            <h3 class="font-serif font-bold text-2xl text-slate-900">Sanctuary Architectural Overview</h3>
+            <p id="roomDesc" class="text-slate-600 text-sm leading-relaxed font-light"></p>
+            <p class="text-slate-600 text-sm leading-relaxed font-light">
+              Crafted in bespoke harmony with the South Palm Atoll, your stay includes 24/7 personal royal butler service, twice-daily housekeeping with evening aromatherapeutic turndown, private plunge pool upkeep, and priority reservations across all 4 Grand Azure destination restaurants.
+            </p>
+          </div>
+
+          <!-- Amenities -->
+          <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+            <h3 class="font-serif font-bold text-2xl text-slate-900">Included Architectural Privileges</h3>
+            <div id="amenitiesGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <!-- Injected by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Col: Sticky Live Calculator in INR -->
+        <div class="lg:col-span-1">
+          <div class="bg-white p-6 sm:p-8 rounded-3xl border border-gold-400/40 shadow-luxury sticky top-24 space-y-6">
+            <div class="flex items-baseline justify-between border-b border-slate-100 pb-4">
+              <div>
+                <span id="cardPricePerNight" class="text-3xl font-serif font-bold text-slate-900"></span>
+                <span class="text-xs text-slate-500 ml-1">/ night</span>
+              </div>
+              <span id="cardStatusBadge" class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700"></span>
+            </div>
+
+            <form id="detailsBookingForm" class="space-y-4">
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="text-[11px] font-bold uppercase text-slate-600 block mb-1">Check-In</label>
+                  <input type="date" id="calcCheckIn" required onchange="recalculate()" class="w-full px-2.5 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-gold-400 font-medium" />
+                </div>
+                <div>
+                  <label class="text-[11px] font-bold uppercase text-slate-600 block mb-1">Check-Out</label>
+                  <input type="date" id="calcCheckOut" required onchange="recalculate()" class="w-full px-2.5 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-gold-400 font-medium" />
+                </div>
+              </div>
+
+              <div>
+                <label class="text-[11px] font-bold uppercase text-slate-600 block mb-1">Guests</label>
+                <select id="calcGuests" onchange="recalculate()" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-gold-400 font-medium">
+                  <option value="1">1 Dignitary</option>
+                  <option value="2" selected>2 Guests (Couple)</option>
+                  <option value="3">3 Guests (Suite)</option>
+                  <option value="4">4 Guests (Penthouse)</option>
+                  <option value="6">6+ Guests (Royal Estate)</option>
+                </select>
+              </div>
+
+              <!-- Price Breakdown (INR) -->
+              <div class="p-4 rounded-2xl bg-pearl border border-slate-100 space-y-2 text-xs text-slate-600">
+                <div class="flex justify-between">
+                  <span id="breakdownNights"></span>
+                  <span id="breakdownRoomSubtotal" class="font-semibold text-slate-800"></span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Luxury GST (18%)</span>
+                  <span id="breakdownTax" class="font-semibold text-slate-800"></span>
+                </div>
+                <div class="border-t border-slate-200 pt-2 flex justify-between font-bold text-sm text-slate-900">
+                  <span>Total Estimated:</span>
+                  <span id="breakdownTotal" class="text-gold-600 font-serif text-base"></span>
+                </div>
+              </div>
+
+              <button type="submit" class="w-full py-3.5 rounded-xl bg-gold-gradient text-azure-950 font-bold text-xs uppercase tracking-wider shadow-lg hover:brightness-105 active:scale-98 transition-all">
+                Proceed to Reservation →
+              </button>
+
+              <p class="text-[11px] text-center text-slate-400">Zero cancellation fee up to 48 hours prior to arrival.</p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomId = urlParams.get('id') || 'room-101';
+    const allRooms = getRooms();
+    const currentRoom = allRooms.find(r => r.id === roomId || r.slug === roomId) || allRooms[0];
+
+    // Populate Page Elements
+    document.getElementById('mainImage').src = currentRoom.images[0];
+    document.getElementById('roomTypeBadge').textContent = currentRoom.architecturalStyle || currentRoom.type;
+    document.getElementById('roomViewBadge').textContent = currentRoom.viewType;
+    document.getElementById('roomTitle').textContent = currentRoom.name;
+    document.getElementById('roomSubtitle').textContent = `Suite #${currentRoom.roomNumber} • ${currentRoom.architecturalStyle || currentRoom.type} • Grand Azure Atoll`;
+    document.getElementById('roomRate').textContent = formatINR(currentRoom.pricePerNight);
+    document.getElementById('cardPricePerNight').textContent = formatINR(currentRoom.pricePerNight);
+    document.getElementById('cardStatusBadge').textContent = currentRoom.status;
+
+    document.getElementById('roomCapacity').textContent = `Up to ${currentRoom.capacity} Guests`;
+    document.getElementById('roomBed').textContent = currentRoom.bedType;
+    document.getElementById('roomSize').textContent = `${currentRoom.sizeSqFt} sq ft`;
+    document.getElementById('roomDesc').textContent = currentRoom.description;
+
+    // Thumbnails
+    const thumbStrip = document.getElementById('thumbStrip');
+    thumbStrip.innerHTML = currentRoom.images.map((img, idx) => `
+      <img src="${img}" alt="Thumbnail ${idx}" onclick="document.getElementById('mainImage').src = '${img}'" class="h-20 w-32 rounded-xl object-cover cursor-pointer hover:opacity-100 opacity-70 border-2 border-transparent hover:border-gold-400 transition-all shrink-0" />
+    `).join('');
+
+    // Amenities
+    const amGrid = document.getElementById('amenitiesGrid');
+    amGrid.innerHTML = currentRoom.amenities.map(a => `
+      <div class="flex items-center gap-2 p-3 rounded-xl bg-pearl border border-slate-100">
+        <span class="text-gold-500 font-bold">✓</span>
+        <span class="font-semibold text-slate-700">${a}</span>
+      </div>
+    `).join('');
+
+    // Default Dates
+    const draft = getBookingDraft();
+    document.getElementById('calcCheckIn').value = draft.checkInDate;
+    document.getElementById('calcCheckOut').value = draft.checkOutDate;
+    document.getElementById('calcGuests').value = draft.adults || '2';
+
+    function recalculate() {
+      const checkIn = document.getElementById('calcCheckIn').value;
+      const checkOut = document.getElementById('calcCheckOut').value;
+      const p = calculatePricing(checkIn, checkOut, currentRoom.pricePerNight);
+
+      document.getElementById('breakdownNights').textContent = `${formatINR(currentRoom.pricePerNight)} × ${p.totalNights} night${p.totalNights > 1 ? 's' : ''}`;
+      document.getElementById('breakdownRoomSubtotal').textContent = formatINR(p.roomSubtotal);
+      document.getElementById('breakdownTax').textContent = formatINR(p.taxAmount);
+      document.getElementById('breakdownTotal').textContent = formatINR(p.finalTotal);
+    }
+
+    recalculate();
+
+    document.getElementById('detailsBookingForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const checkIn = document.getElementById('calcCheckIn').value;
+      const checkOut = document.getElementById('calcCheckOut').value;
+      const guests = document.getElementById('calcGuests').value;
+
+      setBookingDraft({
+        ...draft,
+        roomId: currentRoom.id,
+        checkInDate: checkIn,
+        checkOutDate: checkOut,
+        adults: Number(guests),
+      });
+
+      window.location.href = `checkout.html?roomId=${currentRoom.id}`;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout & Reservation | Grand Azure Luxury Resort</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-pearl text-slate-800 antialiased flex flex-col min-h-screen">
+
+  <header class="sticky top-0 left-0 right-0 z-50 bg-azure-950/95 backdrop-blur-md border-b border-gold-400/20 py-3.5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <img src="images/logo.jpg" alt="Grand Azure Resort Logo" class="h-10 sm:h-12 w-auto rounded-lg object-contain border border-gold-400/40 shadow-glow-gold group-hover:border-gold-300 transition-all" />
+        <div class="flex flex-col">
+          <span class="font-serif tracking-widest text-lg sm:text-xl font-bold uppercase text-white">Grand Azure</span>
+          <span class="text-[10px] tracking-[0.25em] uppercase text-gold-300 font-medium -mt-1">Resort & Spa</span>
+        </div>
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-7 text-sm font-medium tracking-wide">
+        <a href="index.html" class="text-slate-200 hover:text-gold-300">Home</a>
+        <a href="rooms.html" class="text-slate-200 hover:text-gold-300">Sanctuaries & Suites</a>
+        <a href="packages.html" class="text-slate-200 hover:text-gold-300">Curated Packages</a>
+        <a href="dining.html" class="text-slate-200 hover:text-gold-300">Destination Dining</a>
+        <a href="dashboard.html" class="text-slate-200 hover:text-gold-300">Guest Dashboard</a>
+      </nav>
+
+      <a href="auth.html" id="navUserBtn" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full border border-gold-400/40 bg-azure-900/60 text-slate-200 text-xs font-medium">Sign In</a>
+    </div>
+  </header>
+
+  <main class="flex-1 pb-20">
+    <section class="bg-azure-950 text-white py-12 px-4 border-b border-gold-400/20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-2">
+        <span class="text-xs font-bold uppercase tracking-[0.25em] text-gold-300">Step 1 of 2: Reservation & Guest Credentials</span>
+        <h1 class="font-serif text-3xl sm:text-4xl font-bold">Review & Customize Your Stay (INR ₹)</h1>
+      </div>
+    </section>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
+      <form id="checkoutForm" class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <!-- LEFT 2 COLS: ROOM, GUEST, PACKAGES, FOOD, VIP EXTRAS -->
+        <div class="lg:col-span-2 space-y-8">
+          <!-- Room Summary Card -->
+          <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <h3 class="font-serif font-bold text-xl text-slate-900">Selected Architectural Sanctuary</h3>
+              <a href="rooms.html" class="text-xs text-gold-600 font-semibold hover:underline">Change Sanctuary</a>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-5 items-center">
+              <img id="checkRoomImg" src="" alt="Sanctuary" class="w-full sm:w-48 h-32 rounded-2xl object-cover" />
+              <div class="space-y-1.5 flex-1">
+                <span id="checkRoomType" class="px-2.5 py-0.5 rounded-full bg-azure-950 text-gold-300 text-[10px] font-bold uppercase tracking-wider"></span>
+                <h4 id="checkRoomName" class="font-serif font-bold text-lg text-slate-900 leading-snug"></h4>
+                <p id="checkRoomSub" class="text-xs text-slate-500"></p>
+                <p id="checkRoomRate" class="text-xs font-bold text-gold-600 pt-1"></p>
+              </div>
+            </div>
+
+            <!-- Stay Dates -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-slate-100 text-xs text-slate-600">
+              <div><span class="text-slate-400 block text-[10px] uppercase font-bold">Check-In</span><strong id="summaryCheckIn"></strong></div>
+              <div><span class="text-slate-400 block text-[10px] uppercase font-bold">Check-Out</span><strong id="summaryCheckOut"></strong></div>
+              <div><span class="text-slate-400 block text-[10px] uppercase font-bold">Duration</span><strong id="summaryNights"></strong></div>
+              <div><span class="text-slate-400 block text-[10px] uppercase font-bold">Guests</span><strong id="summaryGuests"></strong></div>
+            </div>
+          </div>
+
+          <!-- Guest Info Form -->
+          <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+            <h3 class="font-serif font-bold text-xl text-slate-900 pb-2 border-b border-slate-100">Primary Guest Credentials</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+              <div>
+                <label class="font-bold uppercase text-slate-700 block mb-1">Full Legal Name *</label>
+                <input type="text" id="guestName" required value="Aditya Vikram Singhania" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-gold-400 font-medium" />
+              </div>
+              <div>
+                <label class="font-bold uppercase text-slate-700 block mb-1">Email for Confirmation *</label>
+                <input type="email" id="guestEmail" required value="aditya.singhania@grandazure.com" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-gold-400 font-medium" />
+              </div>
+              <div>
+                <label class="font-bold uppercase text-slate-700 block mb-1">Phone Number (with Country Code) *</label>
+                <input type="tel" id="guestPhone" required value="+91 98200 12345" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-gold-400 font-medium" />
+              </div>
+              <div>
+                <label class="font-bold uppercase text-slate-700 block mb-1">City / Residential Address</label>
+                <input type="text" id="guestAddress" value="Worli Sea Face, Mumbai, Maharashtra 400018" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-gold-400 font-medium" />
+              </div>
+            </div>
+            <div>
+              <label class="text-xs font-bold uppercase text-slate-700 block mb-1">Special Preferences or Dietary Inquiries</label>
+              <textarea id="specialRequests" rows="2" placeholder="Anniversary champagne, late checkout, feather pillows..." class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-gold-400">Celebrating wedding anniversary. Overwater sunset positioning and vegetarian culinary pairings preferred.</textarea>
+            </div>
+          </div>
+
+          <!-- Curated Package Add-On -->
+          <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+              <h3 class="font-serif font-bold text-xl text-slate-900">Curated Experience Package (Optional)</h3>
+              <button type="button" id="removePkgBtn" onclick="removePackage()" class="text-xs text-rose-600 hover:underline hidden">Remove Package</button>
+            </div>
+            <div id="packageSelectArea">
+              <!-- Dynamically rendered -->
+            </div>
+          </div>
+
+          <!-- Food Items from Cart -->
+          <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+              <h3 class="font-serif font-bold text-xl text-slate-900">Gourmet Dining Orders Attached</h3>
+              <a href="dining.html" class="text-xs text-gold-600 font-semibold hover:underline">+ Browse Menu</a>
+            </div>
+            <div id="checkoutFoodItems">
+              <!-- Dynamically rendered -->
+            </div>
+          </div>
+
+          <!-- Bespoke VIP Extras (INR) -->
+          <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+            <h3 class="font-serif font-bold text-xl text-slate-900 pb-2 border-b border-slate-100">Bespoke VIP Add-On Services</h3>
+            <div class="space-y-3 text-xs">
+              <label class="flex items-center justify-between p-3.5 rounded-2xl border border-slate-200 bg-slate-50 cursor-pointer hover:border-gold-400 transition-colors">
+                <div class="flex items-center gap-3">
+                  <input type="checkbox" id="extraHeli" onchange="updateCalculations()" class="rounded accent-gold-500 w-4 h-4" />
+                  <div>
+                    <p class="font-bold text-slate-800">VIP Twin-Turbine Helicopter Atoll Transfer</p>
+                    <p class="text-slate-500 text-[11px]">Direct aerial transfer from international airport terminal to private resort helipad</p>
+                  </div>
+                </div>
+                <span class="font-bold text-gold-600 whitespace-nowrap">+₹25,000</span>
+              </label>
+
+              <label class="flex items-center justify-between p-3.5 rounded-2xl border border-slate-200 bg-slate-50 cursor-pointer hover:border-gold-400 transition-colors">
+                <div class="flex items-center gap-3">
+                  <input type="checkbox" id="extraSpa" onchange="updateCalculations()" class="rounded accent-gold-500 w-4 h-4" />
+                  <div>
+                    <p class="font-bold text-slate-800">Couples Royal Ayurvedic & Pearl Dust Ritual (120 Mins)</p>
+                    <p class="text-slate-500 text-[11px]">Overwater lagoon pavilion with botanical aromatic steam & herbal elixir</p>
+                  </div>
+                </div>
+                <span class="font-bold text-gold-600 whitespace-nowrap">+₹9,500</span>
+              </label>
+
+              <label class="flex items-center justify-between p-3.5 rounded-2xl border border-slate-200 bg-slate-50 cursor-pointer hover:border-gold-400 transition-colors">
+                <div class="flex items-center gap-3">
+                  <input type="checkbox" id="extraCruise" onchange="updateCalculations()" class="rounded accent-gold-500 w-4 h-4" />
+                  <div>
+                    <p class="font-bold text-slate-800">Private Sunset Catamaran Cruise & Beluga Caviar</p>
+                    <p class="text-slate-500 text-[11px]">90-minute bespoke cruise with sommelier champagne pairing</p>
+                  </div>
+                </div>
+                <span class="font-bold text-gold-600 whitespace-nowrap">+₹8,000</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COL: TRANSPARENT FARE BREAKDOWN (INR) -->
+        <div class="lg:col-span-1">
+          <div class="bg-white p-6 sm:p-8 rounded-3xl border border-gold-400/40 shadow-luxury sticky top-24 space-y-6">
+            <h3 class="font-serif font-bold text-xl text-slate-900 pb-3 border-b border-slate-100">Transparent Fare Breakdown</h3>
+
+            <!-- Promo Code -->
+            <div class="space-y-1.5">
+              <label class="text-[11px] font-bold uppercase tracking-wider text-slate-700 block">Privilege Promo Code</label>
+              <div class="flex gap-2">
+                <input type="text" id="promoInput" value="AZUREVIP" class="flex-1 px-3 py-2 text-xs uppercase bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-gold-400 font-bold" />
+                <button type="button" onclick="applyPromo()" class="px-3.5 py-2 rounded-xl bg-azure-950 text-gold-300 text-xs font-bold hover:bg-azure-900">Apply</button>
+              </div>
+              <p id="promoMsg" class="text-[11px] text-emerald-600 font-medium"></p>
+            </div>
+
+            <!-- Financial Lines in INR -->
+            <div class="space-y-2.5 text-xs text-slate-600 pt-2 border-t border-slate-100">
+              <div class="flex justify-between">
+                <span>Sanctuary Charges:</span>
+                <span id="lineRoom" class="font-semibold text-slate-800">₹0</span>
+              </div>
+              <div id="linePackageRow" class="flex justify-between text-gold-700 hidden">
+                <span>Curated Package:</span>
+                <span id="linePackage" class="font-semibold">+₹0</span>
+              </div>
+              <div id="lineFoodRow" class="flex justify-between text-slate-700 hidden">
+                <span>Dining & Room Service:</span>
+                <span id="lineFood" class="font-semibold">+₹0</span>
+              </div>
+              <div id="lineExtrasRow" class="flex justify-between text-slate-700 hidden">
+                <span>Bespoke VIP Extras:</span>
+                <span id="lineExtras" class="font-semibold">+₹0</span>
+              </div>
+              <div id="lineDiscountRow" class="flex justify-between text-emerald-600 font-semibold hidden">
+                <span>VIP Privilege Discount:</span>
+                <span id="lineDiscount">-₹0</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Luxury GST (18%):</span>
+                <span id="lineTax" class="font-semibold text-slate-800">₹0</span>
+              </div>
+              <div class="border-t border-slate-200 pt-3 flex justify-between items-baseline font-bold text-base text-slate-900">
+                <span>Total Amount:</span>
+                <span id="lineFinalTotal" class="text-2xl font-serif text-gold-600">₹0</span>
+              </div>
+            </div>
+
+            <button type="submit" class="w-full py-4 rounded-xl bg-gold-gradient text-azure-950 font-bold text-xs uppercase tracking-widest shadow-lg hover:brightness-105 active:scale-98 transition-all">
+              Proceed to Secure Payment →
+            </button>
+
+            <div class="pt-2 border-t border-slate-100 text-[11px] text-slate-400 space-y-1 text-center">
+              <p>🔒 256-bit Encrypted Level 1 PCI-DSS Security</p>
+              <p>48-Hour Free Cancellation Guaranteed</p>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const draft = getBookingDraft();
+
+    const selectedRoomId = urlParams.get('roomId') || draft.roomId || 'room-101';
+    let selectedPackageId = urlParams.get('packageId') || draft.packageId;
+
+    const allRooms = getRooms();
+    const currentRoom = allRooms.find(r => r.id === selectedRoomId) || allRooms[0];
+    const allPackages = getPackages();
+    let currentPackage = allPackages.find(p => p.id === selectedPackageId);
+
+    // Populate Room info
+    document.getElementById('checkRoomImg').src = currentRoom.images[0];
+    document.getElementById('checkRoomType').textContent = currentRoom.architecturalStyle || currentRoom.type;
+    document.getElementById('checkRoomName').textContent = currentRoom.name;
+    document.getElementById('checkRoomSub').textContent = `Suite #${currentRoom.roomNumber} • ${currentRoom.viewType} • ${currentRoom.bedType}`;
+    document.getElementById('checkRoomRate').textContent = `${formatINR(currentRoom.pricePerNight)} / night`;
+
+    document.getElementById('summaryCheckIn').textContent = draft.checkInDate;
+    document.getElementById('summaryCheckOut').textContent = draft.checkOutDate;
+    document.getElementById('summaryGuests').textContent = `${draft.adults} Guests`;
+
+    // Prefill Active User Info if available
+    const activeGuest = getCurrentUser();
+    if (activeGuest) {
+      if (activeGuest.name) document.getElementById('guestName').value = activeGuest.name;
+      if (activeGuest.email) document.getElementById('guestEmail').value = activeGuest.email;
+      if (activeGuest.phone) document.getElementById('guestPhone').value = activeGuest.phone;
+    }
+
+    // Render Package Area
+    function renderPackageArea() {
+      const area = document.getElementById('packageSelectArea');
+      const removeBtn = document.getElementById('removePkgBtn');
+
+      if (currentPackage) {
+        removeBtn.classList.remove('hidden');
+        area.innerHTML = `
+          <div class="p-4 rounded-2xl bg-gold-50 border border-gold-300 flex items-center gap-4">
+            <img src="${currentPackage.image}" alt="${currentPackage.name}" class="w-20 h-16 rounded-xl object-cover" />
+            <div class="flex-1">
+              <div class="flex justify-between items-center">
+                <h5 class="font-serif font-bold text-slate-900 text-sm">${currentPackage.name}</h5>
+                <span class="font-bold text-gold-700 text-sm">+${formatINR(currentPackage.price)}</span>
+              </div>
+              <p class="text-[11px] text-slate-600 line-clamp-1">${currentPackage.description}</p>
+            </div>
+          </div>
+        `;
+      } else {
+        removeBtn.classList.add('hidden');
+        area.innerHTML = `
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+            ${allPackages.slice(0, 4).map(p => `
+              <div onclick="selectPackage('${p.id}')" class="p-3 rounded-xl border border-slate-200 hover:border-gold-400 bg-slate-50 cursor-pointer flex justify-between items-center transition-colors">
+                <div>
+                  <p class="font-serif font-bold text-slate-800">${p.name}</p>
+                  <p class="text-[10px] text-slate-500">${p.durationNights} Nights Experience</p>
+                </div>
+                <span class="font-bold text-gold-600">+${formatINR(p.price)}</span>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+    }
+
+    function selectPackage(id) {
+      selectedPackageId = id;
+      currentPackage = allPackages.find(p => p.id === id);
+      renderPackageArea();
+      updateCalculations();
+    }
+
+    function removePackage() {
+      selectedPackageId = null;
+      currentPackage = null;
+      renderPackageArea();
+      updateCalculations();
+    }
+
+    // Render Food items from cart
+    function renderFoodItems() {
+      const foodArea = document.getElementById('checkoutFoodItems');
+      const cart = getCart();
+
+      if (cart.length === 0) {
+        foodArea.innerHTML = `<p class="text-xs text-slate-400 italic">No food items attached. You can browse destination dining or proceed with sanctuary stay.</p>`;
+        return;
+      }
+
+      const resorts = getResorts();
+      foodArea.innerHTML = `
+        <div class="divide-y divide-slate-100 text-xs">
+          ${cart.map(item => {
+            const resort = resorts.find(r => r.id === item.menuItem.resortId);
+            const resortLabel = resort ? resort.name.replace('Grand Azure ', '') : 'Resort Kitchen';
+            return `
+            <div class="py-2.5 flex justify-between items-center">
+              <div class="flex items-center gap-3">
+                <img src="${item.menuItem.image}" alt="" class="w-10 h-10 rounded-xl object-cover" />
+                <div>
+                  <p class="font-semibold text-slate-800">${item.menuItem.name}</p>
+                  <p class="text-[10px] text-slate-400">${formatINR(item.menuItem.price)} each • <span class="text-gold-600 font-medium">${resortLabel}</span></p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="font-bold text-slate-700">${item.quantity} pcs</span>
+                <span class="font-bold text-slate-900">${formatINR(item.menuItem.price * item.quantity)}</span>
+              </div>
+            </div>
+          `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    // Apply Promo
+    let appliedPromoCode = 'AZUREVIP';
+    function applyPromo() {
+      const code = document.getElementById('promoInput').value.trim().toUpperCase();
+      if (PROMO_CODES[code]) {
+        appliedPromoCode = code;
+        document.getElementById('promoMsg').textContent = `✓ ${code}: ${PROMO_CODES[code].description}`;
+      } else {
+        appliedPromoCode = '';
+        document.getElementById('promoMsg').textContent = 'Invalid promo code';
+      }
+      updateCalculations();
+    }
+
+    // Live Math
+    let calculatedState = {};
+
+    function updateCalculations() {
+      const pkgPrice = currentPackage ? currentPackage.price : 0;
+      const foodTotal = getCartSubtotal();
+
+      let extras = 0;
+      if (document.getElementById('extraHeli').checked) extras += 25000;
+      if (document.getElementById('extraSpa').checked) extras += 9500;
+      if (document.getElementById('extraCruise').checked) extras += 8000;
+
+      const p = calculatePricing(
+        draft.checkInDate,
+        draft.checkOutDate,
+        currentRoom.pricePerNight,
+        pkgPrice,
+        foodTotal,
+        extras,
+        appliedPromoCode
+      );
+
+      calculatedState = p;
+
+      document.getElementById('summaryNights').textContent = `${p.totalNights} Nights`;
+      document.getElementById('lineRoom').textContent = formatINR(p.roomSubtotal);
+
+      const pkgRow = document.getElementById('linePackageRow');
+      if (p.packageSubtotal > 0) {
+        pkgRow.classList.remove('hidden');
+        document.getElementById('linePackage').textContent = `+${formatINR(p.packageSubtotal)}`;
+      } else pkgRow.classList.add('hidden');
+
+      const foodRow = document.getElementById('lineFoodRow');
+      if (p.foodSubtotal > 0) {
+        foodRow.classList.remove('hidden');
+        document.getElementById('lineFood').textContent = `+${formatINR(p.foodSubtotal)}`;
+      } else foodRow.classList.add('hidden');
+
+      const extrasRow = document.getElementById('lineExtrasRow');
+      if (p.extrasTotal > 0) {
+        extrasRow.classList.remove('hidden');
+        document.getElementById('lineExtras').textContent = `+${formatINR(p.extrasTotal)}`;
+      } else extrasRow.classList.add('hidden');
+
+      const discRow = document.getElementById('lineDiscountRow');
+      if (p.discountAmount > 0) {
+        discRow.classList.remove('hidden');
+        document.getElementById('lineDiscount').textContent = `-${formatINR(p.discountAmount)}`;
+      } else discRow.classList.add('hidden');
+
+      document.getElementById('lineTax').textContent = formatINR(p.taxAmount);
+      document.getElementById('lineFinalTotal').textContent = formatINR(p.finalTotal);
+    }
+
+    renderPackageArea();
+    renderFoodItems();
+    applyPromo();
+
+    // Submit handler
+    document.getElementById('checkoutForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const state = {
+        guestName: document.getElementById('guestName').value,
+        guestEmail: document.getElementById('guestEmail').value,
+        guestPhone: document.getElementById('guestPhone').value,
+        guestAddress: document.getElementById('guestAddress').value,
+        specialRequests: document.getElementById('specialRequests').value,
+        roomId: currentRoom.id,
+        room: currentRoom,
+        checkInDate: draft.checkInDate,
+        checkOutDate: draft.checkOutDate,
+        totalNights: calculatedState.totalNights,
+        adults: draft.adults || 2,
+        children: draft.children || 0,
+        packageId: currentPackage ? currentPackage.id : undefined,
+        package: currentPackage,
+        foodItems: getCart(),
+        roomSubtotal: calculatedState.roomSubtotal,
+        packageSubtotal: calculatedState.packageSubtotal,
+        foodSubtotal: calculatedState.foodSubtotal,
+        additionalServicesTotal: calculatedState.extrasTotal,
+        taxAmount: calculatedState.taxAmount,
+        discountAmount: calculatedState.discountAmount,
+        finalTotal: calculatedState.finalTotal,
+      };
+
+      sessionStorage.setItem('grand_azure_checkout', JSON.stringify(state));
+      window.location.href = 'payment.html';
+    });
+  </script>
+</body>
+</html>

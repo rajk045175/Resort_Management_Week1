@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guest Portal & Dashboard | Grand Azure Luxury Resort</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-pearl text-slate-800 antialiased flex flex-col min-h-screen">
+
+  <header class="sticky top-0 left-0 right-0 z-50 bg-azure-950/95 backdrop-blur-md border-b border-gold-400/20 py-3.5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <img src="images/logo.jpg" alt="Grand Azure Resort Logo" class="h-10 sm:h-12 w-auto rounded-lg object-contain border border-gold-400/40 shadow-glow-gold group-hover:border-gold-300 transition-all" />
+        <div class="flex flex-col">
+          <span class="font-serif tracking-widest text-lg sm:text-xl font-bold uppercase text-white">Grand Azure</span>
+          <span class="text-[10px] tracking-[0.25em] uppercase text-gold-300 font-medium -mt-1">Resort & Spa</span>
+        </div>
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-7 text-sm font-medium tracking-wide">
+        <a href="index.html" class="text-slate-200 hover:text-gold-300">Home</a>
+        <a href="rooms.html" class="text-slate-200 hover:text-gold-300">Sanctuaries & Suites</a>
+        <a href="packages.html" class="text-slate-200 hover:text-gold-300">Curated Packages</a>
+        <a href="dining.html" class="text-slate-200 hover:text-gold-300">Destination Dining</a>
+        <a href="dashboard.html" class="text-gold-300 font-semibold border-b-2 border-gold-400 pb-0.5">Guest Dashboard</a>
+        <a href="admin.html" class="text-gold-300 font-semibold">Admin Portal</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a href="rooms.html" class="px-5 py-2.5 rounded-full bg-gold-gradient text-azure-950 font-bold text-xs uppercase tracking-wider shadow">
+          Book New Sanctuary
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 pb-20">
+    <!-- Profile Banner -->
+    <section class="bg-azure-950 text-white py-12 px-4 border-b border-gold-400/20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-5 text-center md:text-left">
+          <img id="dashAvatar" src="" alt="Profile" class="w-20 h-20 rounded-full object-cover border-2 border-gold-300 shadow-glow-gold" />
+          <div class="space-y-1">
+            <div class="flex items-center gap-2 justify-center md:justify-start">
+              <h1 id="dashName" class="font-serif text-2xl sm:text-3xl font-bold text-white"></h1>
+              <span class="px-2.5 py-0.5 rounded-full bg-gold-400/10 border border-gold-400/30 text-gold-300 text-[10px] font-bold uppercase tracking-wider">
+                Royal VIP Guest
+              </span>
+            </div>
+            <p id="dashEmail" class="text-xs text-slate-400"></p>
+            <p id="dashPhone" class="text-xs text-slate-400"></p>
+          </div>
+        </div>
+
+        <div class="flex gap-2 sm:gap-3">
+          <button onclick="toggleProfileModal(true)" class="px-3.5 sm:px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-200 text-xs font-semibold border border-white/10">
+            Edit Profile
+          </button>
+          <a href="rooms.html" class="px-4 sm:px-5 py-2 rounded-xl bg-gold-gradient text-azure-950 text-xs font-bold uppercase tracking-wider shadow">
+            Book Sanctuary
+          </a>
+          <button onclick="logout()" class="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-rose-500/20 text-slate-300 hover:text-rose-300 text-xs font-semibold border border-white/10" title="Sign Out">
+            Sign Out
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-6">
+      <div class="flex gap-2 overflow-x-auto pb-2 border-b border-slate-200 text-xs font-bold uppercase tracking-wider">
+        <button onclick="setTab('UPCOMING')" id="tabUpcoming" class="px-5 py-2.5 rounded-xl bg-azure-950 text-gold-300 shadow">Upcoming Stays</button>
+        <button onclick="setTab('PAST')" id="tabPast" class="px-5 py-2.5 rounded-xl bg-white text-slate-600 border border-slate-200 hover:border-gold-300">Past Stays</button>
+        <button onclick="setTab('CANCELLED')" id="tabCancelled" class="px-5 py-2.5 rounded-xl bg-white text-slate-600 border border-slate-200 hover:border-gold-300">Cancelled</button>
+        <button onclick="setTab('PAYMENTS')" id="tabPayments" class="px-5 py-2.5 rounded-xl bg-white text-slate-600 border border-slate-200 hover:border-gold-300">Invoices & Payments (₹)</button>
+      </div>
+
+      <!-- Container -->
+      <div id="tabContent" class="space-y-6">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </main>
+
+  <!-- CANCEL MODAL -->
+  <div id="cancelModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-azure-950/80 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-4 shadow-2xl border border-slate-200">
+      <h3 class="font-serif font-bold text-xl text-slate-900">Cancel Reservation</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Are you sure you want to cancel reservation <strong id="cancelTargetId"></strong>? Eligible payments in INR will be refunded to your original payment method within 3 business days per Grand Azure 48-hour policy.
+      </p>
+      <div class="flex gap-3 pt-3">
+        <button onclick="toggleCancelModal(false)" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700">Keep Stay</button>
+        <button onclick="confirmCancel()" class="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs uppercase tracking-wider">Yes, Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE MODAL -->
+  <div id="profileModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-azure-950/80 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-4 shadow-2xl border border-slate-200">
+      <h3 class="font-serif font-bold text-xl text-slate-900">Edit Guest Profile</h3>
+      <form id="profileForm" class="space-y-3 text-xs">
+        <div>
+          <label class="font-bold uppercase text-slate-700 block mb-1">Full Legal Name</label>
+          <input type="text" id="profNameInput" class="w-full px-3 py-2 border border-slate-200 rounded-xl" />
+        </div>
+        <div>
+          <label class="font-bold uppercase text-slate-700 block mb-1">Phone Number</label>
+          <input type="tel" id="profPhoneInput" class="w-full px-3 py-2 border border-slate-200 rounded-xl" />
+        </div>
+        <div class="flex gap-3 pt-3">
+          <button type="button" onclick="toggleProfileModal(false)" class="flex-1 py-2 rounded-xl border border-slate-200 font-semibold">Cancel</button>
+          <button type="submit" class="flex-1 py-2 rounded-xl bg-gold-gradient text-azure-950 font-bold uppercase tracking-wider">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    let user = getCurrentUser();
+    if (!user) {
+      window.location.href = 'auth.html?redirect=dashboard.html';
+    } else {
+      document.getElementById('dashAvatar').src = user.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80';
+      document.getElementById('dashName').textContent = user.name;
+      document.getElementById('dashEmail').textContent = user.email;
+      document.getElementById('dashPhone').textContent = user.phone || '+91 98200 12345';
+    }
+
+    let currentTab = 'UPCOMING';
+    let cancelTargetBookingId = null;
+
+    function setTab(tab) {
+      currentTab = tab;
+      ['Upcoming', 'Past', 'Cancelled', 'Payments'].forEach(t => {
+        const btn = document.getElementById(`tab${t}`);
+        if (t.toUpperCase() === tab) {
+          btn.className = 'px-5 py-2.5 rounded-xl bg-azure-950 text-gold-300 shadow';
+        } else {
+          btn.className = 'px-5 py-2.5 rounded-xl bg-white text-slate-600 border border-slate-200 hover:border-gold-300';
+        }
+      });
+      renderTabContent();
+    }
+
+    function renderTabContent() {
+      const container = document.getElementById('tabContent');
+      const allBookings = getBookings();
+      const allPayments = getPayments();
+
+      if (currentTab === 'UPCOMING') {
+        const upcoming = allBookings.filter(b => b.status === 'CONFIRMED' || b.status === 'PENDING' || b.status === 'CHECKED_IN');
+        if (upcoming.length === 0) {
+          container.innerHTML = `<div class="bg-white rounded-3xl p-12 text-center border border-slate-200 text-xs text-slate-500">No active upcoming stays on record.</div>`;
+          return;
+        }
+
+        container.innerHTML = upcoming.map(b => `
+          <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
+            <div class="flex flex-col sm:flex-row gap-5 items-start sm:items-center">
+              <img src="${b.room?.images?.[0] || 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80'}" class="w-full sm:w-40 h-28 rounded-2xl object-cover" />
+              <div class="space-y-1">
+                <div class="flex items-center gap-2">
+                  <span class="font-mono text-xs font-bold text-azure-950">${b.bookingNumber}</span>
+                  <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-50 text-emerald-700">${b.status}</span>
+                </div>
+                <h4 class="font-serif font-bold text-lg text-slate-900">${b.room?.name || b.roomName || 'Luxury Sanctuary'}</h4>
+                <p class="text-xs text-slate-600">${b.checkInDate} to ${b.checkOutDate} • ${b.totalNights} Nights • ${b.adults} Guests</p>
+                <p class="text-xs font-bold text-slate-900 pt-1">Total Paid: <span class="text-gold-600 font-serif">${formatINR(b.finalTotal)}</span></p>
+              </div>
+            </div>
+            <div class="flex gap-2">
+              <a href="confirmation.html?id=${b.id}" class="px-4 py-2 rounded-xl bg-azure-950 text-gold-300 text-xs font-bold hover:bg-azure-900">Voucher</a>
+              <button onclick="requestCancel('${b.id}')" class="px-4 py-2 rounded-xl border border-rose-200 text-rose-600 hover:bg-rose-50 text-xs font-semibold">Cancel</button>
+            </div>
+          </div>
+        `).join('');
+      } else if (currentTab === 'PAST') {
+        const past = allBookings.filter(b => b.status === 'CHECKED_OUT');
+        if (past.length === 0) {
+          container.innerHTML = `<div class="bg-white rounded-3xl p-12 text-center border border-slate-200 text-xs text-slate-400">No past stays completed yet.</div>`;
+          return;
+        }
+
+        container.innerHTML = past.map(b => `
+          <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm flex justify-between items-center opacity-85">
+            <div>
+              <span class="font-mono text-xs font-bold">${b.bookingNumber}</span>
+              <h4 class="font-serif font-bold text-lg text-slate-900">${b.room?.name || b.roomName}</h4>
+              <p class="text-xs text-slate-500">${b.checkInDate} to ${b.checkOutDate} • ${formatINR(b.finalTotal)}</p>
+            </div>
+            <a href="confirmation.html?id=${b.id}" class="px-4 py-2 rounded-xl border border-slate-200 text-slate-700 text-xs font-semibold hover:border-gold-400">View Invoice</a>
+          </div>
+        `).join('');
+      } else if (currentTab === 'CANCELLED') {
+        const cancelled = allBookings.filter(b => b.status === 'CANCELLED');
+        if (cancelled.length === 0) {
+          container.innerHTML = `<div class="bg-white rounded-3xl p-12 text-center border border-slate-200 text-xs text-slate-400">No cancelled stays.</div>`;
+          return;
+        }
+
+        container.innerHTML = cancelled.map(b => `
+          <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm flex justify-between items-center">
+            <div>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-50 text-rose-700">CANCELLED</span>
+              <h4 class="font-serif font-bold text-base text-slate-900 mt-1">${b.room?.name || b.roomName}</h4>
+              <p class="text-xs text-slate-400">${b.checkInDate} to ${b.checkOutDate}</p>
+            </div>
+            <span class="text-xs text-slate-500">Refund credited per 48h policy.</span>
+          </div>
+        `).join('');
+      } else if (currentTab === 'PAYMENTS') {
+        container.innerHTML = `
+          <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-azure-950 text-gold-300 uppercase tracking-wider text-[10px]">
+                <tr>
+                  <th class="py-3.5 px-6">Payment Ref</th>
+                  <th class="py-3.5 px-6">Reservation #</th>
+                  <th class="py-3.5 px-6">Amount (₹)</th>
+                  <th class="py-3.5 px-6">Payment Rail</th>
+                  <th class="py-3.5 px-6">Status</th>
+                  <th class="py-3.5 px-6 text-right">Invoice</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-slate-700">
+                ${allPayments.map(p => `
+                  <tr>
+                    <td class="py-4 px-6 font-mono font-bold">${p.paymentNumber}</td>
+                    <td class="py-4 px-6 font-mono">${p.bookingNumber}</td>
+                    <td class="py-4 px-6 font-bold text-slate-900">${formatINR(p.amount)}</td>
+                    <td class="py-4 px-6 font-semibold">${p.method}</td>
+                    <td class="py-4 px-6"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700">${p.status}</span></td>
+                    <td class="py-4 px-6 text-right">
+                      <a href="confirmation.html?id=${p.bookingNumber}" class="text-gold-600 font-bold hover:underline">Download</a>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+    }
+
+    function requestCancel(id) {
+      cancelTargetBookingId = id;
+      document.getElementById('cancelTargetId').textContent = id;
+      toggleCancelModal(true);
+    }
+
+    function confirmCancel() {
+      const allBookings = getBookings();
+      const target = allBookings.find(b => b.id === cancelTargetBookingId);
+      if (target) {
+        target.status = 'CANCELLED';
+        setBookings(allBookings);
+        showToast(`Reservation ${target.bookingNumber} cancelled.`);
+      }
+      toggleCancelModal(false);
+      renderTabContent();
+    }
+
+    function toggleCancelModal(open) {
+      document.getElementById('cancelModal').classList.toggle('hidden', !open);
+    }
+
+    function toggleProfileModal(open) {
+      document.getElementById('profNameInput').value = user.name;
+      document.getElementById('profPhoneInput').value = user.phone || '+91 98200 12345';
+      document.getElementById('profileModal').classList.toggle('hidden', !open);
+    }
+
+    document.getElementById('profileForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      user.name = document.getElementById('profNameInput').value;
+      user.phone = document.getElementById('profPhoneInput').value;
+      setCurrentUser(user);
+      document.getElementById('dashName').textContent = user.name;
+      document.getElementById('dashPhone').textContent = user.phone;
+      toggleProfileModal(false);
+      showToast('Profile updated!');
+    });
+
+    renderTabContent();
+  </script>
+</body>
+</html>

@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Executive Admin Console | Grand Azure Luxury Resort</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen relative">
+  <!-- EXECUTIVE ADMIN AUTHENTICATION GATE -->
+  <div id="adminAuthModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-azure-950/95 backdrop-blur-md">
+    <div class="relative w-full max-w-md bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-gold-400/40 space-y-6">
+      
+      <!-- Security Badge & Logo -->
+      <div class="text-center space-y-2">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-azure-950 text-gold-300 text-[10px] font-bold uppercase tracking-widest border border-gold-400/40 shadow-glow-gold">
+          <span>🛡️</span> Restricted Executive Access
+        </div>
+        <div class="flex items-center justify-center gap-3 pt-2">
+          <img src="images/logo.jpg" alt="Grand Azure Logo" class="h-12 w-auto rounded-lg object-contain border border-gold-400/50 shadow-glow-gold" />
+          <div class="text-left">
+            <h1 class="font-serif font-bold text-lg uppercase text-azure-950 leading-tight">Grand Azure</h1>
+            <span class="text-[10px] tracking-[0.2em] uppercase text-gold-600 font-bold block -mt-0.5">Executive Management</span>
+          </div>
+        </div>
+        <p class="text-xs text-slate-500 pt-1">
+          Enter administrative credentials to unlock room inventory, guest reservations, and the financial ledger.
+        </p>
+      </div>
+
+      <!-- Error Alert Box -->
+      <div id="adminAuthError" class="hidden p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold flex items-center gap-2">
+        <span>⚠️</span>
+        <span id="adminAuthErrorMsg">Access denied: Invalid administrator credentials.</span>
+      </div>
+
+      <!-- Credentials Form -->
+      <form id="adminAuthForm" onsubmit="handleAdminLogin(event)" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-bold uppercase tracking-wider text-slate-700 mb-1">Director Email *</label>
+          <div class="relative">
+            <input type="email" id="adminAuthEmail" required placeholder="admin@grandazure.com" value="admin@grandazure.com" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-gold-400 text-slate-900 font-semibold" />
+            <span class="absolute right-3 top-2.5 text-slate-400">👤</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="font-bold uppercase tracking-wider text-slate-700">Security Passcode *</label>
+            <span class="text-[10px] text-slate-400">Default: <code>admin123</code></span>
+          </div>
+          <div class="relative">
+            <input type="password" id="adminAuthPassword" required placeholder="Enter admin passcode" value="admin123" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-gold-400 text-slate-900 font-medium" />
+            <button type="button" onclick="togglePasswordVisibility('adminAuthPassword')" class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600">
+              👁️
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between text-[11px] text-slate-500 pt-0.5">
+          <label class="flex items-center gap-1.5 cursor-pointer">
+            <input type="checkbox" id="adminRemember" checked class="rounded accent-gold-500" />
+            <span>Keep session active</span>
+          </label>
+          <span class="text-emerald-700 font-semibold flex items-center gap-1">🔒 256-bit Encrypted</span>
+        </div>
+
+        <button type="submit" class="w-full py-3 rounded-xl bg-gold-gradient text-azure-950 font-bold uppercase tracking-wider shadow-luxury hover:brightness-105 active:scale-98 transition-all flex items-center justify-center gap-2">
+          <span>Verify & Enter Console</span>
+          <span>→</span>
+        </button>
+      </form>
+
+      <!-- 1-Click Quick Auto-Fill Demo Button -->
+      <div class="pt-2 border-t border-slate-100 space-y-2">
+        <button type="button" onclick="autoFillAdminDemo()" class="w-full py-2.5 px-3 rounded-xl bg-azure-900/10 hover:bg-azure-900/20 border border-gold-400/40 text-azure-950 text-xs font-bold transition-all flex items-center justify-center gap-2">
+          <span>⚡</span>
+          <span>1-Click Auto-Fill Demo Admin</span>
+        </button>
+        <div class="text-center">
+          <a href="index.html" class="text-[11px] text-slate-500 hover:text-slate-700 font-medium hover:underline inline-flex items-center gap-1">
+            <span>← Return to Public Guest Website</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ADMIN MAIN LAYOUT WRAPPER (LOCKED UNTIL AUTHENTICATED) -->
+  <div id="adminMainLayout" class="flex flex-1 min-h-screen hidden">
+
+
+  <!-- ADMIN SIDEBAR -->
+  <aside class="w-64 bg-azure-950 text-slate-200 border-r border-gold-400/20 flex flex-col justify-between shrink-0 min-h-screen">
+    <div class="p-6 space-y-6">
+      <a href="index.html" class="flex items-center gap-3">
+        <img src="images/logo.jpg" alt="Grand Azure Resort Logo" class="h-10 sm:h-12 w-auto rounded-lg object-contain border border-gold-400/40 shadow-glow-gold group-hover:border-gold-300 transition-all" />
+        <div>
+          <h2 class="font-serif font-bold text-base uppercase text-white">Grand Azure</h2>
+          <span class="text-[10px] tracking-[0.2em] uppercase text-gold-300 font-semibold block -mt-1">Admin Console</span>
+        </div>
+      </a>
+
+      <!-- Nav -->
+      <nav class="space-y-1.5 text-xs font-semibold">
+        <button onclick="switchAdminTab('OVERVIEW')" id="navOverview" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-gold-gradient text-azure-950 font-bold shadow">
+          <span>📊</span><span>Analytics & Overview</span>
+        </button>
+        <button onclick="switchAdminTab('ROOMS')" id="navRooms" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-white/10">
+          <span>🏨</span><span>Room Inventory</span>
+        </button>
+        <button onclick="switchAdminTab('BOOKINGS')" id="navBookings" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-white/10">
+          <span>📅</span><span>Reservations Ledger</span>
+        </button>
+        <button onclick="switchAdminTab('PACKAGES')" id="navPackages" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-white/10">
+          <span>🎁</span><span>Curated Packages</span>
+        </button>
+        <button onclick="switchAdminTab('MENU')" id="navMenu" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-white/10">
+          <span>🍽️</span><span>Restaurant Menu</span>
+        </button>
+        <button onclick="switchAdminTab('PAYMENTS')" id="navPayments" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-white/10">
+          <span>💳</span><span>Financial Ledger</span>
+        </button>
+      </nav>
+    </div>
+
+    <div class="p-6 space-y-4 border-t border-white/10 bg-azure-900/40 text-xs">
+      <a href="index.html" class="flex items-center justify-between px-3.5 py-2 rounded-xl bg-azure-900 hover:bg-azure-850 text-slate-300 hover:text-white border border-white/10">
+        <span>View Public Site</span>
+        <span>↗</span>
+      </a>
+
+      <div class="flex items-center justify-between pt-2">
+        <div class="flex items-center gap-2">
+          <img id="adminSideAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" alt="Admin" class="w-8 h-8 rounded-full object-cover border border-gold-400" />
+          <div class="min-w-0">
+            <p id="adminSideName" class="font-bold text-white truncate max-w-[90px]">Alexander Vance</p>
+            <p id="adminSideRole" class="text-[10px] text-gold-300">General Manager</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <a href="auth.html" title="Switch Account / Profile" class="text-slate-400 hover:text-gold-300 text-xs">👤</a>
+          <button onclick="lockAdminConsole()" title="Lock Admin Console" class="text-slate-400 hover:text-rose-400 text-xs font-semibold">🔒 Lock</button>
+          <button onclick="resetDemoData()" title="Reset local data" class="text-slate-400 hover:text-gold-300 text-xs">Reset</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN VIEWPORT -->
+  <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+    <!-- Top Header -->
+    <header class="bg-white border-b border-slate-200 px-8 py-4 flex justify-between items-center sticky top-0 z-30 shadow-sm">
+      <div class="flex items-center gap-4">
+        <h2 id="viewHeading" class="font-serif font-bold text-lg text-slate-900">Operations & Analytics</h2>
+        <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-wider border border-emerald-200">System Live</span>
+      </div>
+
+      <div class="flex items-center gap-3 text-xs">
+        <button onclick="resetDemoData()" class="px-3.5 py-1.5 rounded-lg border border-slate-200 hover:border-gold-400 text-slate-600 font-semibold">
+          Reset Demo Data
+        </button>
+        <a href="index.html" class="px-4 py-1.5 rounded-lg bg-azure-950 text-gold-300 font-bold uppercase tracking-wider hover:bg-azure-900">
+          Guest Site ↗
+        </a>
+        <button onclick="lockAdminConsole()" title="Lock Admin Console" class="px-3.5 py-1.5 rounded-lg bg-rose-50 text-rose-700 hover:bg-rose-100 font-bold border border-rose-200 flex items-center gap-1.5 transition-all">
+          <span>🔒</span><span>Lock Console</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- TAB CONTENTS -->
+    <main class="flex-1 p-8 overflow-y-auto">
+      <!-- 1. OVERVIEW TAB -->
+      <div id="tabOverviewContent" class="space-y-8">
+        <!-- 8 KPI Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="kpiGrid">
+          <!-- Injected via JS -->
+        </div>
+
+        <!-- 4 Chart.js Visualizations Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+            <h4 class="font-serif font-bold text-base text-slate-900">Trailing 7-Day Revenue Velocity ($)</h4>
+            <div class="h-64"><canvas id="dailyRevenueChart"></canvas></div>
+          </div>
+
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+            <h4 class="font-serif font-bold text-base text-slate-900">Monthly Revenue Performance vs Targets ($)</h4>
+            <div class="h-64"><canvas id="monthlyRevenueChart"></canvas></div>
+          </div>
+
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+            <h4 class="font-serif font-bold text-base text-slate-900">Revenue Distribution by Suite Category</h4>
+            <div class="h-64 flex justify-center"><canvas id="suiteShareChart"></canvas></div>
+          </div>
+
+          <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+            <h4 class="font-serif font-bold text-base text-slate-900">Top Selling Gourmet Dishes</h4>
+            <div class="h-64"><canvas id="topDishesChart"></canvas></div>
+          </div>
+        </div>
+
+        <!-- Recent Ledger -->
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 space-y-4">
+          <h4 class="font-serif font-bold text-lg text-slate-900">Recent Guest Reservations</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 text-slate-600 uppercase text-[10px]">
+                <tr>
+                  <th class="p-3">Ref</th>
+                  <th class="p-3">Guest</th>
+                  <th class="p-3">Suite</th>
+                  <th class="p-3">Stay</th>
+                  <th class="p-3">Amount</th>
+                  <th class="p-3">Status</th>
+                  <th class="p-3 text-right">Quick Action</th>
+                </tr>
+              </thead>
+              <tbody id="overviewBookingsTbody" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. ROOMS MANAGEMENT TAB -->
+      <div id="tabRoomsContent" class="space-y-6 hidden">
+        <div class="flex justify-between items-center">
+          <h3 class="font-serif font-bold text-xl text-slate-900">Suite & Villa Inventory</h3>
+          <button onclick="openRoomModal()" class="px-4 py-2 rounded-xl bg-gold-gradient text-azure-950 font-bold text-xs uppercase tracking-wider shadow">
+            + Add New Suite
+          </button>
+        </div>
+
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-azure-950 text-gold-300 uppercase text-[10px]">
+              <tr>
+                <th class="p-4">Suite</th>
+                <th class="p-4">Category</th>
+                <th class="p-4">Capacity</th>
+                <th class="p-4">Price / Night</th>
+                <th class="p-4">Status</th>
+                <th class="p-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="roomsAdminTbody" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 3. BOOKINGS MANAGEMENT TAB -->
+      <div id="tabBookingsContent" class="space-y-6 hidden">
+        <div class="flex justify-between items-center">
+          <h3 class="font-serif font-bold text-xl text-slate-900">Reservations & Guest Ledger</h3>
+          <div class="flex gap-2">
+            <input type="text" id="bookingSearchInput" oninput="renderAdminBookings()" placeholder="Search guest name or ref..." class="px-3.5 py-2 text-xs bg-white border border-slate-200 rounded-xl" />
+          </div>
+        </div>
+
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-azure-950 text-gold-300 uppercase text-[10px]">
+              <tr>
+                <th class="p-4">Reservation #</th>
+                <th class="p-4">Guest Credentials</th>
+                <th class="p-4">Suite</th>
+                <th class="p-4">Check-In / Out</th>
+                <th class="p-4">Total Amount</th>
+                <th class="p-4">Status</th>
+                <th class="p-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="bookingsAdminTbody" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 4. PACKAGES MANAGEMENT TAB -->
+      <div id="tabPackagesContent" class="space-y-6 hidden">
+        <div class="flex justify-between items-center">
+          <h3 class="font-serif font-bold text-xl text-slate-900">Curated Stay Packages</h3>
+          <button onclick="openPackageModal()" class="px-4 py-2 rounded-xl bg-gold-gradient text-azure-950 font-bold text-xs uppercase tracking-wider shadow">
+            + Create Package
+          </button>
+        </div>
+
+        <div id="packagesAdminGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+      <!-- 5. MENU MANAGEMENT TAB -->
+      <div id="tabMenuContent" class="space-y-6 hidden">
+        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+          <div>
+            <h3 class="font-serif font-bold text-xl text-slate-900">Fine Dining Menu Catalog</h3>
+            <p class="text-xs text-slate-500">Manage destination-specific menus across all 4 Grand Azure luxury resorts.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <select id="adminResortMenuFilter" onchange="renderAdminMenu()" class="px-3.5 py-2 rounded-xl text-xs font-bold border border-slate-200 bg-white text-slate-800 focus:outline-none focus:border-gold-400">
+              <option value="ALL">All Resorts (Global Menu)</option>
+              <option value="resort-maldives">Grand Azure Maldives Atoll</option>
+              <option value="resort-bali">Grand Azure Bali Cliff Sanctuary</option>
+              <option value="resort-swiss">Grand Azure Swiss Alpine Lodge</option>
+              <option value="resort-riviera">Grand Azure French Riviera Palace</option>
+            </select>
+            <button onclick="openMenuModal()" class="px-4 py-2 rounded-xl bg-gold-gradient text-azure-950 font-bold text-xs uppercase tracking-wider shadow whitespace-nowrap">
+              + Add New Dish
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-azure-950 text-gold-300 uppercase text-[10px]">
+              <tr>
+                <th class="p-4">Dish & Image</th>
+                <th class="p-4">Resort Property</th>
+                <th class="p-4">Category</th>
+                <th class="p-4">Diet</th>
+                <th class="p-4">Price</th>
+                <th class="p-4">Stock Status</th>
+                <th class="p-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="menuAdminTbody" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 6. PAYMENTS TAB -->
+      <div id="tabPaymentsContent" class="space-y-6 hidden">
+        <h3 class="font-serif font-bold text-xl text-slate-900">Financial Audit & Transactions Ledger</h3>
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-azure-950 text-gold-300 uppercase text-[10px]">
+              <tr>
+                <th class="p-4">Transaction ID</th>
+                <th class="p-4">Booking Ref</th>
+                <th class="p-4">Guest</th>
+                <th class="p-4">Amount</th>
+                <th class="p-4">Method</th>
+                <th class="p-4">Status</th>
+                <th class="p-4 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody id="paymentsAdminTbody" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+  </div> <!-- /#adminMainLayout -->
+
+  <!-- ADD / EDIT ROOM MODAL -->
+  <div id="roomModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-azure-950/80 backdrop-blur-sm hidden overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 space-y-4 shadow-2xl my-8">
+      <h3 id="roomModalTitle" class="font-serif font-bold text-xl text-slate-900 pb-2 border-b">Add New Luxury Suite</h3>
+      <form id="roomForm" class="space-y-3 text-xs">
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="font-bold uppercase text-slate-700 block mb-1">Room #</label><input type="text" id="rmNumber" required class="w-full px-3 py-2 border rounded-xl" /></div>
+          <div><label class="font-bold uppercase text-slate-700 block mb-1">Category</label>
+            <select id="rmType" class="w-full px-3 py-2 border rounded-xl">
+              <option value="Presidential Villa">Presidential Villa</option>
+              <option value="Royal Penthouse">Royal Penthouse</option>
+              <option value="Ocean Villa">Ocean Villa</option>
+              <option value="Deluxe Suite">Deluxe Suite</option>
+              <option value="Garden Bungalow">Garden Bungalow</option>
+            </select>
+          </div>
+        </div>
+        <div><label class="font-bold uppercase text-slate-700 block mb-1">Suite Name</label><input type="text" id="rmName" required class="w-full px-3 py-2 border rounded-xl" /></div>
+        <div class="grid grid-cols-3 gap-3">
+          <div><label class="font-bold uppercase text-slate-700 block mb-1">Price / Night ($)</label><input type="number" id="rmPrice" required class="w-full px-3 py-2 border rounded-xl" /></div>
+          <div><label class="font-bold uppercase text-slate-700 block mb-1">Capacity</label><input type="number" id="rmCapacity" required class="w-full px-3 py-2 border rounded-xl" /></div>
+          <div><label class="font-bold uppercase text-slate-700 block mb-1">Size (sq ft)</label><input type="number" id="rmSize" required class="w-full px-3 py-2 border rounded-xl" /></div>
+        </div>
+        <div><label class="font-bold uppercase text-slate-700 block mb-1">Image URL</label><input type="url" id="rmImg" required class="w-full px-3 py-2 border rounded-xl" /></div>
+        <div><label class="font-bold uppercase text-slate-700 block mb-1">Description</label><textarea id="rmDesc" rows="2" required class="w-full px-3 py-2 border rounded-xl"></textarea></div>
+        <div class="flex gap-3 pt-3">
+          <button type="button" onclick="closeRoomModal()" class="flex-1 py-2 border rounded-xl font-semibold">Cancel</button>
+          <button type="submit" class="flex-1 py-2 rounded-xl bg-gold-gradient text-azure-950 font-bold uppercase tracking-wider">Save Suite</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADD / EDIT DISH MODAL -->
+  <div id="menuModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-azure-950/80 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+      <h3 class="font-serif font-bold text-lg text-slate-900 pb-2 border-b">Add Restaurant Menu Item</h3>
+      <form id="menuForm" class="space-y-3 text-xs">
+        <div>
+          <label class="font-bold uppercase text-slate-700 block mb-1">Target Resort Property *</label>
+          <select id="mResort" class="w-full px-3 py-2 border rounded-xl bg-slate-50 font-semibold focus:outline-none focus:border-gold-400">
+            <option value="resort-maldives">Grand Azure Maldives Atoll</option>
+            <option value="resort-bali">Grand Azure Bali Cliff Sanctuary</option>
+            <option value="resort-swiss">Grand Azure Swiss Alpine Lodge</option>
+            <option value="resort-riviera">Grand Azure French Riviera Palace</option>
+          </select>
+        </div>
+        <div><label class="font-bold uppercase text-slate-700 block mb-1">Dish Name *</label><input type="text" id="mName" required class="w-full px-3 py-2 border rounded-xl" /></div>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="font-bold uppercase text-slate-700 block mb-1">Category</label>
+            <select id="mCategory" class="w-full px-3 py-2 border rounded-xl">
+              <option value="Breakfast">Breakfast</option>
+              <option value="Starters">Starters</option>
+              <option value="Main Course">Main Course</option>
+              <option value="Indian">Indian</option>
+              <option value="Chinese">Chinese</option>
+              <option value="Continental">Continental</option>
+              <option value="Desserts">Desserts</option>
+              <option value="Beverages">Beverages</option>
+              <option value="Snacks">Snacks</option>
+            </select>
+          </div>
+          <div><label class="font-bold uppercase text-slate-700 block mb-1">Price ($)</label><input type="number" id="mPrice" required class="w-full px-3 py-2 border rounded-xl" /></div>
+        </div>
+        <div><label class="font-bold uppercase text-slate-700 block mb-1">Image URL</label><input type="url" id="mImage" required class="w-full px-3 py-2 border rounded-xl" /></div>
+        <div><label class="font-bold uppercase text-slate-700 block mb-1">Description</label><textarea id="mDesc" rows="2" class="w-full px-3 py-2 border rounded-xl"></textarea></div>
+        <div class="flex items-center gap-4">
+          <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="mIsVeg" checked class="rounded accent-emerald-600" /><span>Vegetarian</span></label>
+          <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="mIsSpecial" class="rounded accent-gold-500" /><span>Chef Special</span></label>
+        </div>
+        <div class="flex gap-3 pt-3">
+          <button type="button" onclick="closeMenuModal()" class="flex-1 py-2 border rounded-xl font-semibold">Cancel</button>
+          <button type="submit" class="flex-1 py-2 rounded-xl bg-gold-gradient text-azure-950 font-bold uppercase tracking-wider">Save Dish</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    let activeAdminTab = 'OVERVIEW';
+
+    function switchAdminTab(tab) {
+      activeAdminTab = tab;
+      ['Overview', 'Rooms', 'Bookings', 'Packages', 'Menu', 'Payments'].forEach(t => {
+        const btn = document.getElementById(`nav${t}`);
+        const panel = document.getElementById(`tab${t}Content`);
+        if (t.toUpperCase() === tab) {
+          btn.className = 'w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-gold-gradient text-azure-950 font-bold shadow';
+          panel.classList.remove('hidden');
+        } else {
+          btn.className = 'w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-white/10';
+          panel.classList.add('hidden');
+        }
+      });
+
+      const titleMap = {
+        OVERVIEW: 'Operations & Analytics',
+        ROOMS: 'Room Inventory Management',
+        BOOKINGS: 'Guest Reservations Ledger',
+        PACKAGES: 'Curated Stay Experiences',
+        MENU: 'Restaurant & F&B Menu',
+        PAYMENTS: 'Financial Transactions Ledger',
+      };
+      document.getElementById('viewHeading').textContent = titleMap[tab] || 'Console';
+
+      if (tab === 'OVERVIEW') renderOverview();
+      else if (tab === 'ROOMS') renderAdminRooms();
+      else if (tab === 'BOOKINGS') renderAdminBookings();
+      else if (tab === 'PACKAGES') renderAdminPackages();
+      else if (tab === 'MENU') renderAdminMenu();
+      else if (tab === 'PAYMENTS') renderAdminPayments();
+    }
+
+    // 1. OVERVIEW
+    function renderOverview() {
+      const bookings = getBookings();
+      const rooms = getRooms();
+      const payments = getPayments();
+
+      const totalRevenue = payments.filter(p => p.status === 'COMPLETED').reduce((sum, p) => sum + p.amount, 0);
+      const occupied = rooms.filter(r => r.status === 'OCCUPIED').length;
+      const available = rooms.filter(r => r.status === 'AVAILABLE').length;
+
+      document.getElementById('kpiGrid').innerHTML = `
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
+          <p class="text-[10px] uppercase font-bold text-slate-400">Total Revenue</p>
+          <p class="text-2xl font-serif font-bold text-slate-900">$${totalRevenue.toLocaleString()}</p>
+          <span class="text-[11px] text-emerald-600 font-semibold">+18.4% month</span>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
+          <p class="text-[10px] uppercase font-bold text-slate-400">Total Bookings</p>
+          <p class="text-2xl font-serif font-bold text-slate-900">${bookings.length}</p>
+          <span class="text-[11px] text-slate-500">All registered stays</span>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
+          <p class="text-[10px] uppercase font-bold text-slate-400">Available Suites</p>
+          <p class="text-2xl font-serif font-bold text-emerald-700">${available}</p>
+          <span class="text-[11px] text-slate-500">Ready for guest arrival</span>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
+          <p class="text-[10px] uppercase font-bold text-slate-400">Occupied Suites</p>
+          <p class="text-2xl font-serif font-bold text-azure-900">${occupied + 2}</p>
+          <span class="text-[11px] text-slate-500">82% occupancy rate</span>
+        </div>
+      `;
+
+      // Render Overview Bookings Table
+      const tb = document.getElementById('overviewBookingsTbody');
+      tb.innerHTML = bookings.slice(0, 5).map(b => `
+        <tr class="hover:bg-slate-50">
+          <td class="p-3 font-mono font-bold">${b.bookingNumber}</td>
+          <td class="p-3 font-semibold text-slate-900">${b.guestName}</td>
+          <td class="p-3">${b.room?.name || b.roomName}</td>
+          <td class="p-3 text-slate-500">${b.checkInDate}</td>
+          <td class="p-3 font-bold">$${b.finalTotal.toFixed(2)}</td>
+          <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${b.status === 'CONFIRMED' ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'}">${b.status}</span></td>
+          <td class="p-3 text-right">
+            ${b.status === 'CONFIRMED' ? `<button onclick="updateBookingState('${b.id}', 'CHECKED_IN')" class="px-2 py-1 rounded bg-azure-950 text-gold-300 font-bold text-[10px]">Check In</button>` : ''}
+            ${b.status === 'CHECKED_IN' ? `<button onclick="updateBookingState('${b.id}', 'CHECKED_OUT')" class="px-2 py-1 rounded bg-emerald-600 text-white font-bold text-[10px]">Check Out</button>` : ''}
+          </td>
+        </tr>
+      `).join('');
+
+      initCharts();
+    }
+
+    // Chart.js Initializers
+    let chartsInitialized = false;
+    function initCharts() {
+      if (chartsInitialized) return;
+      chartsInitialized = true;
+
+      // Daily
+      new Chart(document.getElementById('dailyRevenueChart'), {
+        type: 'line',
+        data: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          datasets: [{
+            label: 'Revenue ($)',
+            data: [4200, 6800, 5400, 8900, 14200, 18500, 16100],
+            borderColor: '#C5A880',
+            backgroundColor: 'rgba(197, 168, 128, 0.15)',
+            tension: 0.3,
+            fill: true
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+      });
+
+      // Monthly
+      new Chart(document.getElementById('monthlyRevenueChart'), {
+        type: 'bar',
+        data: {
+          labels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+          datasets: [
+            { label: 'Actual', data: [145000, 168000, 210000, 285000, 310000, 240000], backgroundColor: '#0A192F' },
+            { label: 'Target', data: [120000, 140000, 180000, 240000, 260000, 220000], backgroundColor: '#C5A880' }
+          ]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+      });
+
+      // Suite Share
+      new Chart(document.getElementById('suiteShareChart'), {
+        type: 'doughnut',
+        data: {
+          labels: ['Presidential Villa', 'Royal Penthouse', 'Overwater Bungalow', 'Deluxe Suites'],
+          datasets: [{
+            data: [35, 25, 20, 20],
+            backgroundColor: ['#C5A880', '#D4AF37', '#1B3A63', '#0A192F']
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+      });
+
+      // Top Dishes
+      new Chart(document.getElementById('topDishesChart'), {
+        type: 'bar',
+        data: {
+          labels: ['Sea Bass', 'Angus Ribeye', 'Awadhi Biryani', 'Burrata', 'Azure Spritz'],
+          datasets: [{
+            label: 'Orders',
+            data: [48, 42, 38, 34, 56],
+            backgroundColor: '#A47B2E'
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y' }
+      });
+    }
+
+    // 2. ROOMS
+    let editingRoomId = null;
+    function renderAdminRooms() {
+      const rooms = getRooms();
+      document.getElementById('roomsAdminTbody').innerHTML = rooms.map(r => `
+        <tr class="hover:bg-slate-50">
+          <td class="p-4">
+            <div class="flex items-center gap-3">
+              <img src="${r.images[0]}" class="w-12 h-10 rounded-xl object-cover" />
+              <div><p class="font-bold text-slate-900">#${r.roomNumber} - ${r.name}</p><p class="text-[10px] text-slate-400">${r.sizeSqFt} sq ft • ${r.viewType}</p></div>
+            </div>
+          </td>
+          <td class="p-4 font-semibold">${r.type}</td>
+          <td class="p-4">${r.capacity} Guests</td>
+          <td class="p-4 font-bold text-slate-900">$${r.pricePerNight}</td>
+          <td class="p-4">
+            <select onchange="updateRoomStatus('${r.id}', this.value)" class="px-2 py-1 text-[10px] font-bold uppercase rounded border">
+              <option value="AVAILABLE" ${r.status === 'AVAILABLE' ? 'selected' : ''}>AVAILABLE</option>
+              <option value="OCCUPIED" ${r.status === 'OCCUPIED' ? 'selected' : ''}>OCCUPIED</option>
+              <option value="MAINTENANCE" ${r.status === 'MAINTENANCE' ? 'selected' : ''}>MAINTENANCE</option>
+            </select>
+          </td>
+          <td class="p-4 text-right space-x-2">
+            <button onclick="editRoom('${r.id}')" class="p-1 hover:text-azure-950">✏️</button>
+            <button onclick="deleteRoomItem('${r.id}')" class="p-1 hover:text-rose-600">🗑️</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function updateRoomStatus(id, status) {
+      const rooms = getRooms();
+      const r = rooms.find(i => i.id === id);
+      if (r) { r.status = status; setRooms(rooms); showToast(`Suite ${r.roomNumber} status set to ${status}`); }
+    }
+
+    function openRoomModal() {
+      editingRoomId = null;
+      document.getElementById('roomModalTitle').textContent = 'Add New Luxury Suite';
+      document.getElementById('rmNumber').value = Math.floor(100 + Math.random() * 900);
+      document.getElementById('rmName').value = '';
+      document.getElementById('rmPrice').value = 650;
+      document.getElementById('rmCapacity').value = 2;
+      document.getElementById('rmSize').value = 900;
+      document.getElementById('rmImg').value = 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80';
+      document.getElementById('rmDesc').value = 'Pristine ocean views with dedicated butler service.';
+      document.getElementById('roomModal').classList.remove('hidden');
+    }
+
+    function editRoom(id) {
+      editingRoomId = id;
+      const rooms = getRooms();
+      const r = rooms.find(i => i.id === id);
+      if (!r) return;
+      document.getElementById('roomModalTitle').textContent = 'Edit Suite';
+      document.getElementById('rmNumber').value = r.roomNumber;
+      document.getElementById('rmName').value = r.name;
+      document.getElementById('rmType').value = r.type;
+      document.getElementById('rmPrice').value = r.pricePerNight;
+      document.getElementById('rmCapacity').value = r.capacity;
+      document.getElementById('rmSize').value = r.sizeSqFt;
+      document.getElementById('rmImg').value = r.images[0];
+      document.getElementById('rmDesc').value = r.description;
+      document.getElementById('roomModal').classList.remove('hidden');
+    }
+
+    function closeRoomModal() {
+      document.getElementById('roomModal').classList.add('hidden');
+    }
+
+    document.getElementById('roomForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const rooms = getRooms();
+      const newRoom = {
+        id: editingRoomId || `room-${Date.now()}`,
+        roomNumber: document.getElementById('rmNumber').value,
+        name: document.getElementById('rmName').value,
+        slug: document.getElementById('rmName').value.toLowerCase().replace(/\s+/g, '-'),
+        type: document.getElementById('rmType').value,
+        pricePerNight: Number(document.getElementById('rmPrice').value),
+        capacity: Number(document.getElementById('rmCapacity').value),
+        bedType: 'Super King Bed',
+        sizeSqFt: Number(document.getElementById('rmSize').value),
+        viewType: 'Oceanfront View',
+        images: [document.getElementById('rmImg').value],
+        amenities: ['Private Infinity Pool', '24/7 Dedicated Butler', 'High-Speed Wi-Fi'],
+        status: 'AVAILABLE',
+        featured: false,
+      };
+
+      if (editingRoomId) {
+        const idx = rooms.findIndex(r => r.id === editingRoomId);
+        if (idx !== -1) rooms[idx] = newRoom;
+      } else {
+        rooms.unshift(newRoom);
+      }
+      setRooms(rooms);
+      closeRoomModal();
+      renderAdminRooms();
+      showToast('Suite saved successfully!');
+    });
+
+    function deleteRoomItem(id) {
+      if (confirm('Delete this suite?')) {
+        let rooms = getRooms();
+        rooms = rooms.filter(r => r.id !== id);
+        setRooms(rooms);
+        renderAdminRooms();
+        showToast('Suite removed.');
+      }
+    }
+
+    // 3. BOOKINGS
+    function renderAdminBookings() {
+      const search = document.getElementById('bookingSearchInput')?.value.toLowerCase() || '';
+      const bookings = getBookings().filter(b => {
+        if (search && !b.guestName.toLowerCase().includes(search) && !b.bookingNumber.toLowerCase().includes(search)) return false;
+        return true;
+      });
+
+      document.getElementById('bookingsAdminTbody').innerHTML = bookings.map(b => `
+        <tr class="hover:bg-slate-50">
+          <td class="p-4 font-mono font-bold">${b.bookingNumber}</td>
+          <td class="p-4"><p class="font-bold text-slate-900">${b.guestName}</p><p class="text-[10px] text-slate-400">${b.guestEmail} • ${b.guestPhone}</p></td>
+          <td class="p-4">${b.room?.name || b.roomName}</td>
+          <td class="p-4 text-slate-500">${b.checkInDate} → ${b.checkOutDate}</td>
+          <td class="p-4 font-bold text-slate-900">$${b.finalTotal.toFixed(2)}</td>
+          <td class="p-4"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${b.status === 'CONFIRMED' ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100'}">${b.status}</span></td>
+          <td class="p-4 text-right space-x-1.5">
+            ${b.status === 'CONFIRMED' ? `<button onclick="updateBookingState('${b.id}', 'CHECKED_IN')" class="px-2 py-1 rounded bg-azure-950 text-gold-300 font-bold text-[10px]">Check In</button>` : ''}
+            ${b.status === 'CHECKED_IN' ? `<button onclick="updateBookingState('${b.id}', 'CHECKED_OUT')" class="px-2 py-1 rounded bg-emerald-600 text-white font-bold text-[10px]">Check Out</button>` : ''}
+            ${b.status !== 'CANCELLED' ? `<button onclick="updateBookingState('${b.id}', 'CANCELLED')" class="px-2 py-1 rounded border border-rose-200 text-rose-600 text-[10px]">Cancel</button>` : ''}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function updateBookingState(id, status) {
+      const bookings = getBookings();
+      const b = bookings.find(item => item.id === id);
+      if (b) {
+        b.status = status;
+        setBookings(bookings);
+        showToast(`Reservation ${b.bookingNumber} status: ${status}`);
+        if (activeAdminTab === 'OVERVIEW') renderOverview();
+        else renderAdminBookings();
+      }
+    }
+
+    // 4. PACKAGES
+    function renderAdminPackages() {
+      const pkgs = getPackages();
+      document.getElementById('packagesAdminGrid').innerHTML = pkgs.map(p => `
+        <div class="bg-white rounded-3xl border border-slate-200 p-6 space-y-3 shadow-sm">
+          <img src="${p.image}" class="w-full h-40 rounded-2xl object-cover" />
+          <div class="flex justify-between items-center">
+            <h4 class="font-serif font-bold text-slate-900">${p.name}</h4>
+            <span class="font-bold text-gold-600">$${p.price}</span>
+          </div>
+          <p class="text-xs text-slate-500 line-clamp-2">${p.description}</p>
+          <div class="pt-2 flex justify-between items-center border-t border-slate-100 text-xs">
+            <span class="text-slate-400">${p.durationNights} Nights</span>
+            <button onclick="togglePkgActive('${p.id}')" class="px-2 py-1 rounded text-[10px] font-bold ${p.isActive ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-500'}">
+              ${p.isActive ? 'Active' : 'Disabled'}
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function togglePkgActive(id) {
+      const pkgs = getPackages();
+      const p = pkgs.find(item => item.id === id);
+      if (p) { p.isActive = !p.isActive; setPackages(pkgs); renderAdminPackages(); }
+    }
+
+    // 5. MENU
+    function renderAdminMenu() {
+      const selectedResort = document.getElementById('adminResortMenuFilter')?.value || 'ALL';
+      const resorts = getResorts();
+      let menu = getMenuItems();
+
+      if (selectedResort !== 'ALL') {
+        menu = menu.filter(m => m.resortId === selectedResort);
+      }
+
+      document.getElementById('menuAdminTbody').innerHTML = menu.map(m => {
+        const resort = resorts.find(r => r.id === m.resortId);
+        const resortName = resort ? resort.name.replace('Grand Azure ', '') : 'All Resorts';
+        return `
+        <tr class="hover:bg-slate-50">
+          <td class="p-4 flex items-center gap-3">
+            <img src="${m.image}" class="w-10 h-10 rounded-xl object-cover" />
+            <div>
+              <p class="font-bold text-slate-900">${m.name}</p>
+              ${m.isChefSpecial ? '<span class="text-[9px] text-gold-600 font-bold uppercase">★ Chef Signature</span>' : ''}
+            </div>
+          </td>
+          <td class="p-4">
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-azure-900/10 text-azure-900 border border-azure-900/20 whitespace-nowrap">
+              ${resortName}
+            </span>
+          </td>
+          <td class="p-4 font-semibold">${m.category}</td>
+          <td class="p-4">${m.isVeg ? '<span class="text-emerald-600 font-bold">Veg</span>' : '<span class="text-rose-600 font-bold">Non-Veg</span>'}</td>
+          <td class="p-4 font-bold text-slate-900">$${m.price}</td>
+          <td class="p-4">
+            <button onclick="toggleMenuStock('${m.id}')" class="px-2 py-1 rounded text-[10px] font-bold ${m.isAvailable ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}">
+              ${m.isAvailable ? 'In Stock' : 'Sold Out'}
+            </button>
+          </td>
+          <td class="p-4 text-right">
+            <button onclick="deleteMenuItem('${m.id}')" class="text-rose-600 hover:underline">Delete</button>
+          </td>
+        </tr>
+      `}).join('');
+    }
+
+    function toggleMenuStock(id) {
+      const items = getMenuItems();
+      const item = items.find(i => i.id === id);
+      if (item) { item.isAvailable = !item.isAvailable; setMenuItems(items); renderAdminMenu(); }
+    }
+
+    function openMenuModal() {
+      document.getElementById('menuModal').classList.remove('hidden');
+    }
+    function closeMenuModal() {
+      document.getElementById('menuModal').classList.add('hidden');
+    }
+
+    document.getElementById('menuForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const items = getMenuItems();
+      const newItem = {
+        id: `menu-${Date.now()}`,
+        resortId: document.getElementById('mResort').value,
+        name: document.getElementById('mName').value,
+        category: document.getElementById('mCategory').value,
+        price: Number(document.getElementById('mPrice').value),
+        description: document.getElementById('mDesc').value,
+        image: document.getElementById('mImage').value,
+        isVeg: document.getElementById('mIsVeg').checked,
+        isChefSpecial: document.getElementById('mIsSpecial').checked,
+        isAvailable: true
+      };
+      items.unshift(newItem);
+      setMenuItems(items);
+      closeMenuModal();
+      renderAdminMenu();
+      showToast('Dish added to restaurant menu!');
+    });
+
+    function deleteMenuItem(id) {
+      if (confirm('Delete this food item?')) {
+        let items = getMenuItems();
+        items = items.filter(i => i.id !== id);
+        setMenuItems(items);
+        renderAdminMenu();
+      }
+    }
+
+    // 6. PAYMENTS
+    function renderAdminPayments() {
+      const payments = getPayments();
+      document.getElementById('paymentsAdminTbody').innerHTML = payments.map(p => `
+        <tr class="hover:bg-slate-50">
+          <td class="p-4 font-mono font-bold">${p.paymentNumber}</td>
+          <td class="p-4 font-mono">${p.bookingNumber}</td>
+          <td class="p-4 font-semibold text-slate-900">${p.customerName}</td>
+          <td class="p-4 font-bold text-slate-900">$${p.amount.toFixed(2)}</td>
+          <td class="p-4">${p.method}</td>
+          <td class="p-4"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${p.status === 'COMPLETED' ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100'}">${p.status}</span></td>
+          <td class="p-4 text-right">
+            ${p.status === 'COMPLETED' ? `<button onclick="refundPay('${p.id}')" class="text-rose-600 hover:underline">Issue Refund</button>` : '<span class="text-slate-400">Processed</span>'}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function refundPay(id) {
+      if (confirm('Process simulated refund for this transaction?')) {
+        const payments = getPayments();
+        const p = payments.find(i => i.id === id);
+        if (p) {
+          p.status = 'REFUNDED';
+          setPayments(payments);
+          renderAdminPayments();
+          showToast(`Refund issued for ${p.paymentNumber}`);
+        }
+      }
+    }
+
+    // ==========================================
+    // EXECUTIVE ADMIN AUTHENTICATION CONTROLLER
+    // ==========================================
+    const ADMIN_AUTH_KEY = 'grand_azure_admin_auth';
+
+    function checkAdminAuth() {
+      const isAuth = sessionStorage.getItem(ADMIN_AUTH_KEY) === 'true';
+      const authModal = document.getElementById('adminAuthModal');
+      const mainLayout = document.getElementById('adminMainLayout');
+
+      if (isAuth) {
+        if (authModal) authModal.classList.add('hidden');
+        if (mainLayout) mainLayout.classList.remove('hidden');
+
+        // Update Admin Avatar and Name
+        const activeAdmin = getCurrentUser();
+        if (activeAdmin) {
+          const sideName = document.getElementById('adminSideName');
+          const sideAvatar = document.getElementById('adminSideAvatar');
+          if (sideName) sideName.textContent = activeAdmin.name || 'Alexander Vance';
+          if (sideAvatar && activeAdmin.avatar) sideAvatar.src = activeAdmin.avatar;
+        }
+
+        renderOverview();
+      } else {
+        if (authModal) authModal.classList.remove('hidden');
+        if (mainLayout) mainLayout.classList.add('hidden');
+      }
+    }
+
+    function handleAdminLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('adminAuthEmail').value.trim();
+      const password = document.getElementById('adminAuthPassword').value.trim();
+      const errBox = document.getElementById('adminAuthError');
+      const errMsg = document.getElementById('adminAuthErrorMsg');
+
+      // Credentials: admin@grandazure.com with pass admin123 or azure2026 or azure2026vip
+      const validAdminEmails = ['admin@grandazure.com', 'director@grandazure.com', 'admin@resort.com'];
+      const validPasswords = ['admin123', 'azure2026', 'azure2026vip', 'admin'];
+
+      const isEmailValid = validAdminEmails.includes(email.toLowerCase()) || email.toLowerCase().includes('admin');
+      const isPassValid = validPasswords.includes(password.toLowerCase());
+
+      if (isEmailValid && isPassValid) {
+        if (errBox) errBox.classList.add('hidden');
+        sessionStorage.setItem(ADMIN_AUTH_KEY, 'true');
+        
+        // Log in user as ADMIN in session state
+        const user = login(email, 'ADMIN');
+        showToast(`Authentication verified. Welcome, ${user.name}!`);
+
+        checkAdminAuth();
+      } else {
+        if (errBox) {
+          errBox.classList.remove('hidden');
+          errMsg.textContent = 'Invalid administrator credentials. Demo: admin@grandazure.com / admin123';
+        }
+      }
+    }
+
+    function autoFillAdminDemo() {
+      const emailInput = document.getElementById('adminAuthEmail');
+      const passInput = document.getElementById('adminAuthPassword');
+      if (emailInput) emailInput.value = 'admin@grandazure.com';
+      if (passInput) passInput.value = 'admin123';
+      const errBox = document.getElementById('adminAuthError');
+      if (errBox) errBox.classList.add('hidden');
+    }
+
+    function lockAdminConsole() {
+      sessionStorage.removeItem(ADMIN_AUTH_KEY);
+      showToast('Admin Console locked securely.');
+      checkAdminAuth();
+    }
+
+    function togglePasswordVisibility(inputId) {
+      const input = document.getElementById(inputId);
+      if (input) {
+        input.type = input.type === 'password' ? 'text' : 'password';
+      }
+    }
+
+    // Initialize Auth Gate on Load
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAdminAuth();
+    });
+  </script>
+</body>
+</html>
