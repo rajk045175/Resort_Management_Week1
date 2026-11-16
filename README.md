@@ -63,7 +63,6 @@ Key Features
 | HTML5 | Website structure |
 | CSS3 | Styling and layouts |
 | JavaScript | Interactive functionality |
-| Tailwind CSS utility classes | Responsive UI styling |
 | Chart.js | Dashboard data visualization |
 
  📂 Project Structure
